@@ -46,7 +46,6 @@ public class Main extends Application {
 			splitButtons.getChildren().addAll(patientLoginButton, staffLoginButton);
 			root.getChildren().add(topBottom);
 			root.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #e9cfff 30%, #fdebff 47%);");
-			System.out.print(welcome.getLayoutX());
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
