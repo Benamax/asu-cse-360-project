@@ -2,11 +2,12 @@ package application;
 
 public class ViewController {
 	private static View INITIAL_VIEW = new InitialView();
-	
+	private static View LOGIN_VIEW = new loginScreen();
 	private static View CURRENT_VIEW = null;
 	
 	public enum Views {
 		INITIAL,
+		LOGINSCREEN,
 		PATIENT_LOGIN,
 		STAFF_LOGIN,
 		PATIENT_PORTAL,
@@ -20,6 +21,9 @@ public class ViewController {
 		switch(newView) {
 			case INITIAL:
 				view = INITIAL_VIEW;
+				break;
+			case LOGINSCREEN:
+				view = LOGIN_VIEW;
 				break;
 			default:
 				System.out.println("ViewController: No view option for " + newView.toString());

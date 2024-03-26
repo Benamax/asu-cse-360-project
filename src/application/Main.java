@@ -8,8 +8,8 @@ import javafx.scene.layout.Pane;
 
 
 public class Main extends Application {
-	private static int WINDOW_WIDTH = 700;
-	private static int WINDOW_HEIGHT = 500;
+	private static int WINDOW_WIDTH = 1100;
+	private static int WINDOW_HEIGHT = 700;
 	
 	public static Scene mainScene;
 	

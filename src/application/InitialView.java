@@ -36,8 +36,8 @@ public class InitialView extends View {
 		btnPatient.setFont(btnFont);
 		btnStaff.setFont(btnFont);
 		
-		btnPatient.setOnAction(e -> ViewController.switchView(Views.PATIENT_LOGIN));
-		btnStaff.setOnAction(e -> ViewController.switchView(Views.STAFF_LOGIN));
+		btnPatient.setOnAction(e -> ViewController.switchView(Views.LOGINSCREEN));
+		btnStaff.setOnAction(e -> ViewController.switchView(Views.LOGINSCREEN));
 		
 		hBtns.getChildren().addAll(btnPatient, btnStaff);
 		hBtns.setAlignment(Pos.CENTER);
