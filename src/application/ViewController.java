@@ -2,7 +2,7 @@ package application;
 
 public class ViewController {
 	private static View INITIAL_VIEW = new InitialView();
-	private static View STAFF_PORTAL_VIEW = new staffPortal();
+	private static View STAFF_PORTAL_VIEW = new StaffPortal();
 	private static View CURRENT_VIEW = null;
 	
 	public enum Views {

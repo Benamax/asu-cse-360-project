@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 
 
-public class staffPortal extends View {
+public class StaffPortal extends View {
 	@Override
 	public Parent generate() {
 		VBox vLayout;
