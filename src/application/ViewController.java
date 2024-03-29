@@ -2,12 +2,11 @@ package application;
 
 public class ViewController {
 	private static View INITIAL_VIEW = new InitialView();
-	private static View LOGIN_VIEW = new loginScreen();
+	private static View LOGIN_VIEW = new LoginView();
 	private static View CURRENT_VIEW = null;
 	
 	public enum Views {
 		INITIAL,
-		LOGINSCREEN,
 		PATIENT_LOGIN,
 		STAFF_LOGIN,
 		PATIENT_PORTAL,
@@ -22,7 +21,10 @@ public class ViewController {
 			case INITIAL:
 				view = INITIAL_VIEW;
 				break;
-			case LOGINSCREEN:
+			case PATIENT_LOGIN:
+				view = LOGIN_VIEW;
+				break;
+			case STAFF_LOGIN:
 				view = LOGIN_VIEW;
 				break;
 			default:

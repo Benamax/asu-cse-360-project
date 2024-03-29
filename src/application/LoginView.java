@@ -14,10 +14,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import application.ViewController.Views;
 
-public class loginScreen extends View {
+public class LoginView extends View {
 	@Override
 	public Parent generate() {
-			BorderPane root2 = new BorderPane();
+			BorderPane borderRoot = new BorderPane();
 			Label welcome = new Label("Login");
 			Label welcome2 = new Label("Not registered?");
 			Label userLabel = new Label("USER");
@@ -68,10 +68,10 @@ public class loginScreen extends View {
 			topBottom.setMinSize(200, 200);
 			miniHBox.getChildren().addAll(welcome2, createButton);
 			topBottom.getChildren().addAll(welcome, miniHBox, userLabel, userField, passLabel, passField, loginButton);
-			root2.getChildren().add(topBottom);
-			root2.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #ffe485 30%, #ffe5c4 47%);");
-			root = root2;
-			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			borderRoot.getChildren().add(topBottom);
+			borderRoot.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #ffe485 30%, #ffe5c4 47%);");
+			
+			root = borderRoot;
 			return root;
 	}
 	
