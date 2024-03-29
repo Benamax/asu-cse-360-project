@@ -18,7 +18,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Project");
 		
 		mainScene = new Scene(new Pane(), WINDOW_WIDTH, WINDOW_HEIGHT);
-		ViewController.switchView(Views.INITIAL);
+		ViewController.switchView(Views.STAFF_PORTAL);
 		
 		primaryStage.setScene(mainScene);
 		primaryStage.show();
