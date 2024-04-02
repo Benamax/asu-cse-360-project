@@ -31,7 +31,6 @@ public class StaffPortalView extends View {
 		welcomeLabel.setFont(Font.font("Arial", 36));
 		vLayout = new VBox(25);
 		vLayout.getChildren().addAll(welcomeLabel, patientLookup, addNewPatient, inboxButton, viewSchedule, signOut);
-
 		
 		vLayout.setAlignment(Pos.CENTER);
 		

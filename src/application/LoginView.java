@@ -26,6 +26,7 @@ public class LoginView extends View {
 			TextField passField = new TextField();
 			Button loginButton = new Button("Login");
 			Button createButton = new Button("Create an account");
+			Button backButton = new Button("Back");
 			
 			
 			
@@ -59,15 +60,15 @@ public class LoginView extends View {
 			topBottom.setStyle("-fx-border-color: #02114f;");
 			topBottom.setLayoutX(400);
 			//topBottom.setAlignment(Pos.CENTER);
-
 			
-			
-			
+			backButton.setAlignment(Pos.CENTER);
+			backButton.setMinSize(200, 25);
+			backButton.setOnAction(e -> ViewController.switchView(Views.INITIAL));
 			
 			createButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: blue; -fx-font-size: 14px; -fx-underline: true;");
 			topBottom.setMinSize(200, 200);
 			miniHBox.getChildren().addAll(welcome2, createButton);
-			topBottom.getChildren().addAll(welcome, miniHBox, userLabel, userField, passLabel, passField, loginButton);
+			topBottom.getChildren().addAll(welcome, miniHBox, userLabel, userField, passLabel, passField, loginButton, backButton);
 			borderRoot.getChildren().add(topBottom);
 			borderRoot.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #ffe485 30%, #ffe5c4 47%);");
 			
