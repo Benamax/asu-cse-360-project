@@ -26,6 +26,7 @@ public class StaffPortalView extends View {
 		viewSchedule.setFont(Font.font("Arial", 16));
 		Button signOut = new Button("Sign Out");
 		signOut.setFont(Font.font("Arial", 16));
+		signOut.setOnAction(e -> ViewController.switchView(Views.INITIAL));
 		
 		
 		welcomeLabel.setFont(Font.font("Arial", 36));

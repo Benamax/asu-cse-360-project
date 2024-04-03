@@ -15,6 +15,12 @@ import javafx.scene.text.Font;
 import application.ViewController.Views;
 
 public class LoginView extends View {
+	private LoginType loginType;
+	public enum LoginType {
+		PATIENT,
+		STAFF
+	}
+	
 	@Override
 	public Parent generate() {
 			BorderPane borderRoot = new BorderPane();
@@ -55,6 +61,7 @@ public class LoginView extends View {
 			loginButton.setStyle("-fx-background-color: #000000; -fx-border-color: #02114f; -fx-text-fill: #ffffff;");
 			loginButton.setAlignment(Pos.CENTER);
 			loginButton.setMinSize(200, 100);
+			loginButton.setOnAction(e -> attemptLogin());
 			VBox topBottom = new VBox(10);
 			topBottom.setStyle("-fx-border-color: #02114f;");
 			topBottom.setLayoutX(400);
@@ -77,5 +84,19 @@ public class LoginView extends View {
 	
 	public void reset() {
 		
+	}
+	
+	public void setLoginType(LoginType loginType) {
+		this.loginType = loginType;
+	}
+	
+	private void attemptLogin() {
+		// TODO: Interface with login system to confirm credentials.
+		
+		if(loginType == LoginType.PATIENT) {
+			ViewController.switchView(Views.PATIENT_PORTAL);
+		} else if(loginType == LoginType.STAFF) {
+			ViewController.switchView(Views.STAFF_PORTAL);
+		}
 	}
 }

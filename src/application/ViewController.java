@@ -1,5 +1,7 @@
 package application;
 
+import application.LoginView.LoginType;
+
 public class ViewController {
 	private static View INITIAL_VIEW = new InitialView();
 	private static View LOGIN_VIEW = new LoginView();
@@ -26,9 +28,11 @@ public class ViewController {
 				break;
 			case PATIENT_LOGIN:
 				view = LOGIN_VIEW;
+				((LoginView)LOGIN_VIEW).setLoginType(LoginType.PATIENT);
 				break;
 			case STAFF_LOGIN:
 				view = LOGIN_VIEW;
+				((LoginView)LOGIN_VIEW).setLoginType(LoginType.STAFF);
 				break;
 			case STAFF_PORTAL:
 				view = STAFF_PORTAL_VIEW;
