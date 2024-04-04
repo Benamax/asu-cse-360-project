@@ -1,5 +1,6 @@
 package application;
 
+import application.ViewController.Views;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ public class PatientLookupView extends View {
 	TextField lastNameTField;
 	TextField dobTField;
 	
+	Button backButton;
 	Button searchButton;
 		
 	Text title;
@@ -51,7 +53,19 @@ public class PatientLookupView extends View {
 		Font searchButtonFont = Font.font("Arial", 14);
 		searchButton.setFont(searchButtonFont);
 		
-		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, searchButton);
+		backButton = new Button("Back");
+		Font backButtonFont = Font.font("Arial", 14);
+		backButton.setFont(backButtonFont);
+		
+		backButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
+		
+		backButton.setPrefSize(150, 50);
+		searchButton.setPrefSize(150, 50);
+		
+		hButton.getChildren().addAll(backButton, searchButton);
+		hButton.setAlignment(Pos.CENTER);
+		
+		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, hButton);
 		vLayout.setAlignment(Pos.CENTER);
 		
 		root = vLayout;
