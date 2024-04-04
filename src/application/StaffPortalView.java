@@ -27,10 +27,11 @@ public class StaffPortalView extends View {
 		Button signOut = new Button("Sign Out");
 		signOut.setFont(Font.font("Arial", 16));
 		
-		
 		welcomeLabel.setFont(Font.font("Arial", 36));
 		vLayout = new VBox(25);
 		vLayout.getChildren().addAll(welcomeLabel, patientLookup, addNewPatient, inboxButton, viewSchedule, signOut);
+		
+		inboxButton.setOnAction(e -> ViewController.switchView(Views.INBOX) );
 		
 		vLayout.setAlignment(Pos.CENTER);
 		

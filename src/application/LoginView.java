@@ -69,6 +69,14 @@ public class LoginView extends View {
 				ViewController.switchView(Views.INITIAL);
 			});
 			
+			loginButton.setOnAction(e -> {
+				
+				if(userField.getText().compareTo("staff") == 0) {
+					ViewController.switchView(Views.STAFF_PORTAL);
+				}
+				
+			});
+			
 			createButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: blue; -fx-font-size: 14px; -fx-underline: true;");
 			topBottom.setMinSize(200, 200);
 			miniHBox.getChildren().addAll(welcome2, createButton);
