@@ -15,15 +15,24 @@ import javafx.scene.text.Font;
 import application.ViewController.Views;
 
 public class LoginView extends View {
+	TextField userField;
+	TextField passField;
+	
+	private LoginType loginType;
+	public enum LoginType {
+		PATIENT,
+		STAFF
+	}
+	
 	@Override
 	public Parent generate() {
 			BorderPane borderRoot = new BorderPane();
 			Label welcome = new Label("Login");
 			Label welcome2 = new Label("Not registered?");
 			Label userLabel = new Label("USER");
-			TextField userField = new TextField();
+			userField = new TextField();
 			Label passLabel = new Label("PASS");
-			TextField passField = new TextField();
+			passField = new TextField();
 			Button loginButton = new Button("Login");
 			Button createButton = new Button("Create an account");
 			Button backButton = new Button("Back");
@@ -56,6 +65,7 @@ public class LoginView extends View {
 			loginButton.setStyle("-fx-background-color: #000000; -fx-border-color: #02114f; -fx-text-fill: #ffffff;");
 			loginButton.setAlignment(Pos.CENTER);
 			loginButton.setMinSize(200, 100);
+			loginButton.setOnAction(e -> attemptLogin());
 			VBox topBottom = new VBox(10);
 			topBottom.setStyle("-fx-border-color: #02114f;");
 			topBottom.setLayoutX(400);
@@ -69,13 +79,7 @@ public class LoginView extends View {
 				ViewController.switchView(Views.INITIAL);
 			});
 			
-			loginButton.setOnAction(e -> {
-				
-				if(userField.getText().compareTo("staff") == 0) {
-					ViewController.switchView(Views.STAFF_PORTAL);
-				}
-				
-			});
+			loginButton.setOnAction(e -> attemptLogin());
 			
 			createButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: blue; -fx-font-size: 14px; -fx-underline: true;");
 			topBottom.setMinSize(200, 200);
@@ -89,6 +93,21 @@ public class LoginView extends View {
 	}
 	
 	public void reset() {
+		userField.clear();
+		passField.clear();
+	}
+	
+	public void setLoginType(LoginType loginType) {
+		this.loginType = loginType;
+	}
+	
+	private void attemptLogin() {
+		// TODO: Interface with login system to confirm credentials.
 		
+		if(loginType == LoginType.PATIENT) {
+			ViewController.switchView(Views.PATIENT_PORTAL);
+		} else if(loginType == LoginType.STAFF) {
+			ViewController.switchView(Views.STAFF_PORTAL);
+		}
 	}
 }

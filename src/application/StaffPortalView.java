@@ -18,14 +18,17 @@ public class StaffPortalView extends View {
 		Label welcomeLabel = new Label("Staff Portal");
 		Button patientLookup = new Button("Patient Lookup");
 		patientLookup.setFont(Font.font("Arial", 16));
+		patientLookup.setOnAction(e -> ViewController.switchView(Views.PATIENT_LOOKUP));
 		Button addNewPatient = new Button("Add New Patient");
 		addNewPatient.setFont(Font.font("Arial", 16));
+		addNewPatient.setOnAction(e -> ViewController.switchView(Views.ADD_PATIENT));
 		Button inboxButton = new Button("Inbox");
 		inboxButton.setFont(Font.font("Arial", 16));
 		Button viewSchedule = new Button("View Schedule");
 		viewSchedule.setFont(Font.font("Arial", 16));
 		Button signOut = new Button("Sign Out");
 		signOut.setFont(Font.font("Arial", 16));
+		signOut.setOnAction(e -> ViewController.switchView(Views.INITIAL));
 		
 		welcomeLabel.setFont(Font.font("Arial", 36));
 		vLayout = new VBox(25);
