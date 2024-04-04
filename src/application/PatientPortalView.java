@@ -79,6 +79,7 @@ public class PatientPortalView extends View {
 		doctorLayout.setAlignment(Pos.CENTER);
 		
 		btnVisits = new Button("Prior Visits");
+		btnVisits.setOnAction(e -> ViewController.switchView(Views.PATIENT_VISITS));
 		btnSignOut = new Button("Sign Out");
 		btnSignOut.setPrefSize(150, 40);
 		btnSignOut.setOnAction(e -> ViewController.switchView(Views.INITIAL));
