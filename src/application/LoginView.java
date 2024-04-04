@@ -63,7 +63,11 @@ public class LoginView extends View {
 			
 			backButton.setAlignment(Pos.CENTER);
 			backButton.setMinSize(200, 25);
-			backButton.setOnAction(e -> ViewController.switchView(Views.INITIAL));
+			backButton.setOnAction(e -> {
+				userField.setText("");
+				passField.setText("");
+				ViewController.switchView(Views.INITIAL);
+			});
 			
 			createButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: blue; -fx-font-size: 14px; -fx-underline: true;");
 			topBottom.setMinSize(200, 200);
