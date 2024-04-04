@@ -11,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -46,7 +47,7 @@ public class InboxView extends View{
 		
 		HBox returnAndReply = new HBox(700);
 		backToPortal = new Button("Back");
-		reply = new Button("reply");
+		reply = new Button("Reply");
 		backToPortal.setPrefSize(150, 50);
 		reply.setPrefSize(150, 50);
 		returnAndReply.getChildren().addAll(backToPortal, reply);
@@ -81,7 +82,13 @@ public class InboxView extends View{
 
         TextField messageContents = new TextField();
         messageContents.setEditable(false);
-        //messageContents.setVisible(false);
+        messageContents.setVisible(false);
+        messageContents.setPrefHeight(250);
+        
+        ScrollPane mailScroller = new ScrollPane();
+		mailScroller.setContent(listView);
+		mailScroller.setFitToWidth(true);
+		mailScroller.setFitToHeight(true);
         
         // Add event handler for item selection
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -90,8 +97,9 @@ public class InboxView extends View{
             
             if(newValue != null) {
             
-            	main.setCenter(messageContents);
+            	//main.setCenter(messageContents);
                 messageContents.setVisible(true);
+                mailScroller.setVisible(false);
                 messageContents.setText("This is item: " + newValue);
             
             } else {
@@ -100,20 +108,17 @@ public class InboxView extends View{
         });
         
 		
-		ScrollPane mailScroller = new ScrollPane();
-		mailScroller.setContent(listView) ;
-		mailScroller.setFitToWidth(true);
-		mailScroller.setFitToHeight(true);
-		BorderPane.setMargin(mailScroller, new Insets(30));
-		
         messageContents.setOnMouseClicked(event ->  {
-        	main.setCenter(mailScroller);
         	messageContents.setVisible(false);
+        	mailScroller.setVisible(true);
         });
 		
+        StackPane centerPane = new StackPane();
+        centerPane.getChildren().addAll(mailScroller, messageContents);
+        BorderPane.setMargin(centerPane, new Insets(30));
+        
 		main.setRight(sideButtonAlign);
-		main.setCenter(mailScroller);
-		main.getChildren().add(messageContents);
+		main.setCenter(centerPane);
 		main.setBottom(returnAndReply);
 
         root = main;
