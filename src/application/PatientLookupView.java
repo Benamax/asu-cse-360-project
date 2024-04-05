@@ -19,8 +19,8 @@ public class PatientLookupView extends View {
 	TextField lastNameTField;
 	TextField dobTField;
 	
-	Button backButton;
 	Button searchButton;
+	Button backButton;
 		
 	Text title;
 	Text firstNameText;
@@ -50,22 +50,15 @@ public class PatientLookupView extends View {
 		dobTField.setMaxSize(200,50);
 		
 		searchButton = new Button("Search");
-		Font searchButtonFont = Font.font("Arial", 14);
-		searchButton.setFont(searchButtonFont);
+		searchButton.setOnAction(e -> attemptLookup());
+		Font buttonFont = Font.font("Arial", 14);
+		searchButton.setFont(buttonFont);
 		
 		backButton = new Button("Back");
-		Font backButtonFont = Font.font("Arial", 14);
-		backButton.setFont(backButtonFont);
-		
 		backButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
+		backButton.setFont(buttonFont);
 		
-		backButton.setPrefSize(150, 50);
-		searchButton.setPrefSize(150, 50);
-		
-		hButton.getChildren().addAll(backButton, searchButton);
-		hButton.setAlignment(Pos.CENTER);
-		
-		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, hButton);
+		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, searchButton, backButton);
 		vLayout.setAlignment(Pos.CENTER);
 		
 		root = vLayout;
@@ -77,5 +70,10 @@ public class PatientLookupView extends View {
 	public void reset() {
 
 	}
-
+	
+	private void attemptLookup() {
+		// TODO: Check if patient actually exists
+		
+		ViewController.switchView(Views.PATIENT_INFO);
+	}
 }
