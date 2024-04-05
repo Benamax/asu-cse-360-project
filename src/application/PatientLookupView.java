@@ -1,5 +1,6 @@
 package application;
 
+import application.ViewController.Views;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ public class PatientLookupView extends View {
 	TextField dobTField;
 	
 	Button searchButton;
+	Button backButton;
 		
 	Text title;
 	Text firstNameText;
@@ -48,10 +50,15 @@ public class PatientLookupView extends View {
 		dobTField.setMaxSize(200,50);
 		
 		searchButton = new Button("Search");
-		Font searchButtonFont = Font.font("Arial", 14);
-		searchButton.setFont(searchButtonFont);
+		searchButton.setOnAction(e -> attemptLookup());
+		Font buttonFont = Font.font("Arial", 14);
+		searchButton.setFont(buttonFont);
 		
-		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, searchButton);
+		backButton = new Button("Back");
+		backButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
+		backButton.setFont(buttonFont);
+		
+		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, searchButton, backButton);
 		vLayout.setAlignment(Pos.CENTER);
 		
 		root = vLayout;
@@ -63,5 +70,10 @@ public class PatientLookupView extends View {
 	public void reset() {
 
 	}
-
+	
+	private void attemptLookup() {
+		// TODO: Check if patient actually exists
+		
+		ViewController.switchView(Views.PATIENT_INFO);
+	}
 }
