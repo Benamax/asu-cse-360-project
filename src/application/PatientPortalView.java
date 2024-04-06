@@ -1,5 +1,7 @@
 package application;
 
+import java.util.ArrayList;
+
 import application.ViewController.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,9 +94,11 @@ public class PatientPortalView extends View {
 		VBox mailLayout = new VBox(5);
 		lblMail = new Label("All Mail");
 		lstMail = new ListView<>();
-		ObservableList<String> mail = FXCollections.observableArrayList(
-				"Msg 1", "Msg 2", "Msg 3", "Msg 4", "Msg 5", "Msg 6", "Msg 7");
-		lstMail.setItems(mail);
+		//ObservableList<String> mail = FXCollections.observableArrayList(
+				//"Msg 1", "Msg 2", "Msg 3", "Msg 4", "Msg 5", "Msg 6", "Msg 7");
+		MessageSystem logs = new MessageSystem();
+		ObservableList<String> mail = FXCollections.observableArrayList(logs.loadMessages("ncorwins")); // currently just loading from me, but this should be updated
+		lstMail.setItems(mail);																			// to whoever is logged in
 		lstMail.setPrefSize(200, 150);
 		btnNewMsg = new Button("New Message");
 		mailLayout.getChildren().addAll(lblMail, lstMail, btnNewMsg);

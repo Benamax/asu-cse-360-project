@@ -1,5 +1,7 @@
 package application;
 
+import java.util.ArrayList;
+
 import application.ViewController.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -147,6 +149,14 @@ public class InboxView extends View{
                   	main.setCenter(sendLayout);
                   	
                 	send.setOnAction(event -> {
+                		MessageSystem sendmsg = new MessageSystem();
+                		ArrayList<String> logs = sendmsg.loadMessages(senderEmail.getText());
+                		logs.add("D: " + composeMessage.getText());
+                		System.out.print(logs);
+                		sendmsg.addMessage(senderEmail.getText(), logs);
+                		
+                		
+                		
                     	send.setVisible(false);
                     	messageContents.setVisible(true);
                     	
@@ -176,6 +186,11 @@ public class InboxView extends View{
         	main.setCenter(sendLayout);
         	
         	send.setOnAction(event -> {
+        		MessageSystem sendmsg = new MessageSystem();
+        		ArrayList<String> logs = sendmsg.loadMessages(senderEmail.getText());
+        		logs.add("D: " + composeMessage.getText());
+        		System.out.print(logs);
+        		sendmsg.addMessage(senderEmail.getText(), logs);
             	send.setVisible(false);
             	main.setCenter(mailScroller);
         	});

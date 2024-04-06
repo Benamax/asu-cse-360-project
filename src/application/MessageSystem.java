@@ -13,10 +13,10 @@ import java.util.Scanner;
 
 import javafx.scene.control.TextField;
 
-public class LoginSystem {
-	public void SaveInfo(String filename, String[] fieldText) {
+public class MessageSystem {
+	public void addMessage(String filename, ArrayList<String> chatLogs) {
 		try {													   
-			String filepath = "src\\Logins\\" + filename + ".txt";
+			String filepath = "src\\Messages\\" + filename + ".txt";
 			File f = new File(filepath);
 			if(f.createNewFile()) {
 				System.out.println("\n\n\n\n\nFile created: " + f.getName() + "\n\n\n\n");
@@ -24,8 +24,8 @@ public class LoginSystem {
 				System.out.println("File already exists.");
 			}
 			FileWriter writer = new FileWriter(filepath);
-			for (int i = 0; i < fieldText.length; i++) {
-				writer.write(fieldText[i] + "\n");
+			for (int i = 0; i < chatLogs.size(); i++) {
+				writer.write(chatLogs.get(i) + "\n");
 			}
 			/* this is for converting the calendar value to a date
 			if (apptDate.getValue() != null) {
@@ -44,19 +44,17 @@ public class LoginSystem {
 			e.printStackTrace();
 		}
 	}
-	public ArrayList LoadInfo(String filename, String password) {
+	public ArrayList loadMessages(String filename) {
 		ArrayList<String> allData = new ArrayList<String>();
 		try {
-			String filepath = "src\\Logins\\" + filename + ".txt";
+			String filepath = "src\\Messages\\" + filename + ".txt";
 			File f = new File(filepath);
 			allData = new ArrayList<String>();
 			Scanner scnr = new Scanner(f);
-			String str = scnr.nextLine();
-			if (!str.equals(password)) {
-				scnr.close();
-				return null;
+			while (scnr.hasNextLine()) {
+				String str = scnr.nextLine();
+				allData.add(str);
 			}
-			allData.add(str);
 			/*
 				for (int i = 0; i < 6; i++) {
 					String str = scnr.nextLine(); // loading in the patient info
