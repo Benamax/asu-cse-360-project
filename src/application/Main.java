@@ -16,7 +16,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Project");
-		
+		LoginSystem testLogin = new LoginSystem();
+		String[] info = {"cmud77", "a", "b", "C"};
+		testLogin.SaveInfo("ncorwins", info);
 		mainScene = new Scene(new Pane(), WINDOW_WIDTH, WINDOW_HEIGHT);
 		ViewController.switchView(Views.INITIAL);
 		
