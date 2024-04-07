@@ -1,5 +1,7 @@
 package application;
 	
+import java.util.ArrayList;
+
 import application.ViewController.Views;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -16,7 +18,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Project");
-		
 		mainScene = new Scene(new Pane(), WINDOW_WIDTH, WINDOW_HEIGHT);
 		ViewController.switchView(Views.INITIAL);
 		

@@ -65,12 +65,12 @@ public class LoginView extends View {
 			loginButton.setStyle("-fx-background-color: #000000; -fx-border-color: #02114f; -fx-text-fill: #ffffff;");
 			loginButton.setAlignment(Pos.CENTER);
 			loginButton.setMinSize(200, 100);
-			loginButton.setOnAction(e -> attemptLogin());
+			loginButton.setOnAction(e -> attemptLogin(userField.getText(), passField.getText()));
 			VBox topBottom = new VBox(10);
 			topBottom.setStyle("-fx-border-color: #02114f;");
 			topBottom.setLayoutX(400);
 			//topBottom.setAlignment(Pos.CENTER);
-			
+			createButton.setOnAction(e -> ViewController.switchView(Views.ADD_PATIENT));
 			backButton.setAlignment(Pos.CENTER);
 			backButton.setMinSize(200, 25);
 			backButton.setOnAction(e -> {
@@ -79,9 +79,11 @@ public class LoginView extends View {
 				ViewController.switchView(Views.INITIAL);
 			});
 			
-			loginButton.setOnAction(e -> attemptLogin());
+			loginButton.setOnAction(e -> attemptLogin(userField.getText(), passField.getText()));
 			
 			createButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: blue; -fx-font-size: 14px; -fx-underline: true;");
+			
+			
 			topBottom.setMinSize(200, 200);
 			miniHBox.getChildren().addAll(welcome2, createButton);
 			topBottom.getChildren().addAll(welcome, miniHBox, userLabel, userField, passLabel, passField, loginButton, backButton);
@@ -101,13 +103,26 @@ public class LoginView extends View {
 		this.loginType = loginType;
 	}
 	
-	private void attemptLogin() {
+	private void attemptLogin(String username, String password) {
 		// TODO: Interface with login system to confirm credentials.
-		
+		LoginSystem login = new LoginSystem();
 		if(loginType == LoginType.PATIENT) {
-			ViewController.switchView(Views.PATIENT_PORTAL);
+			if (login.LoadInfo(username, password).size() != 0) {
+				ViewController.switchView(Views.PATIENT_PORTAL);
+				System.out.println("Login Successful");
+			}
+			else {
+				System.out.println("Login Failed");
+			}
+
 		} else if(loginType == LoginType.STAFF) {
-			ViewController.switchView(Views.STAFF_PORTAL);
+			if (login.LoadInfo(username, password).size() != 0) {
+				ViewController.switchView(Views.STAFF_PORTAL);
+				System.out.println("Login Successful");
+			}
+			else {
+				System.out.println("Login Failed");
+			}
 		}
 	}
 }

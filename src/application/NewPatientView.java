@@ -43,7 +43,7 @@ public class NewPatientView  extends View{
 		middleLayout = new HBox(10);
 		hBtns = new HBox(20);
 		
-		welcomeTxt = new Text("Add New Patient");
+		welcomeTxt = new Text("Create an Account");
 		welcomeTxt.setFont(Font.font("Arial", 26));
 		
 		enterFirst = new Text("First Name");
@@ -77,8 +77,8 @@ public class NewPatientView  extends View{
 		backButton.setFont(btnFont);
 		addButton.setFont(btnFont);
 		
-		backButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
-		addButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
+		backButton.setOnAction(e -> ViewController.switchView(Views.INITIAL));
+		addButton.setOnAction(e -> ViewController.switchView(Views.INITIAL));
 		
 		firstNameLayout.getChildren().addAll(enterFirst, firstName);
 		lastNameLayout.getChildren().addAll(enterLast, lastName);
