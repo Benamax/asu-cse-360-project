@@ -54,7 +54,7 @@ public class PatientInformationView extends View {
 			
 			priorVisitsButton = new Button("Visits");
 			priorVisitsButton.setPrefSize(150, 50);
-			priorVisitsButton.setOnAction(e -> ViewController.switchView(Views.PATIENT_VISITS));
+			priorVisitsButton.setOnAction(e -> ViewController.switchView(Views.PATIENT_VISITS_STAFF));
 			
 			finishButton = new Button("Finish");
 			finishButton.setPrefSize(150, 50);

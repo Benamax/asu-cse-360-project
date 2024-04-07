@@ -1,6 +1,7 @@
 package application;
 
 import application.LoginView.LoginType;
+import application.PatientVisitsView.Perspective;
 
 public class ViewController {
 	private static View INITIAL_VIEW = new InitialView();
@@ -13,6 +14,7 @@ public class ViewController {
 	private static View INBOX_VIEW = new InboxView();
 	private static View PATIENT_INFO_VIEW = new PatientInformationView();
 	private static View STAFF_SCHEDULE_VIEW = new StaffScheduleView();
+	private static View EDIT_VISIT_VIEW = new EditVisitView();
 	
 	private static View CURRENT_VIEW = null;
 	
@@ -21,13 +23,15 @@ public class ViewController {
 		PATIENT_LOGIN,
 		PATIENT_PORTAL,
 		PATIENT_VISITS,
+		PATIENT_VISITS_STAFF,
 		STAFF_LOGIN,
 		STAFF_PORTAL,
 	    PATIENT_LOOKUP,
 	    ADD_PATIENT,
 	    INBOX,
 	    PATIENT_INFO,
-	    STAFF_SCHEDULE
+	    STAFF_SCHEDULE,
+	    EDIT_VISIT
 	}
 	
 	public static void switchView(Views newView) {
@@ -60,6 +64,11 @@ public class ViewController {
 				break;
 			case PATIENT_VISITS:
 				view = PATIENT_VISITS_VIEW;
+				((PatientVisitsView)PATIENT_VISITS_VIEW).changePerspective(Perspective.PATIENT);
+				break;
+			case PATIENT_VISITS_STAFF:
+				view = PATIENT_VISITS_VIEW;
+				((PatientVisitsView)PATIENT_VISITS_VIEW).changePerspective(Perspective.STAFF);
 				break;
 			case INBOX:
 				view = INBOX_VIEW;
@@ -69,6 +78,9 @@ public class ViewController {
 				break;
 			case STAFF_SCHEDULE:
 				view = STAFF_SCHEDULE_VIEW;
+				break;
+			case EDIT_VISIT:
+				view = EDIT_VISIT_VIEW;
 				break;
 			default:
 				System.out.println("ViewController: No view option for " + newView.toString());

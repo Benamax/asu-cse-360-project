@@ -20,7 +20,15 @@ public class PatientVisitsView extends View {
 	Label lblInfo;
 	TextField tfInfo;
 	
+	Button btnNew;
+	Button btnEdit;
 	Button btnExit;
+	
+	private Perspective perspective;
+	public enum Perspective {
+		PATIENT,
+		STAFF
+	}
 	
 	@Override
 	public Parent generate() {
@@ -48,6 +56,14 @@ public class PatientVisitsView extends View {
 		infoBox.getChildren().addAll(lblInfo, tfInfo);
 		infoBox.setAlignment(Pos.CENTER_RIGHT);
 		
+		btnNew = new Button("New Visit");
+		btnNew.setPrefSize(150, 50);
+		btnNew.setOnAction(e -> ViewController.switchView(Views.EDIT_VISIT));
+		
+		btnEdit = new Button("Edit Visit");
+		btnEdit.setPrefSize(150, 50);
+		btnEdit.setOnAction(e -> ViewController.switchView(Views.EDIT_VISIT));
+		
 		btnExit = new Button("Back");
 		btnExit.setPrefSize(150, 50);
 		btnExit.setOnAction(e -> ViewController.switchView(Views.PATIENT_PORTAL));
@@ -64,6 +80,24 @@ public class PatientVisitsView extends View {
 	@Override
 	public void reset() {
 
+	}
+	
+	public void changePerspective(Perspective p) {
+		if(p == Perspective.PATIENT) {
+			tfInfo.setMinHeight(300);
+			tfInfo.setPrefHeight(300);
+			tfInfo.setMaxHeight(300);
+			
+			// TODO: Remove buttons
+		} else if(p == Perspective.STAFF){
+			tfInfo.setMinHeight(150);
+			tfInfo.setPrefHeight(150);
+			tfInfo.setMaxHeight(150);
+			
+			// TODO: Add buttons
+		}
+		
+		perspective = p;
 	}
 	
 	private GridPane createCalendar() {
