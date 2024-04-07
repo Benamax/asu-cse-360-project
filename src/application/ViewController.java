@@ -12,7 +12,7 @@ public class ViewController {
 	private static View PATIENT_VISITS_VIEW = new PatientVisitsView();
 	private static View INBOX_VIEW = new InboxView();
 	private static View PATIENT_INFO_VIEW = new PatientInformationView();
-	
+	private static View PATIENT_INBOX_VIEW = new PatientInboxView();
 	private static View CURRENT_VIEW = null;
 	
 	public enum Views {
@@ -25,7 +25,8 @@ public class ViewController {
 	    PATIENT_LOOKUP,
 	    ADD_PATIENT,
 	    INBOX,
-	    PATIENT_INFO
+	    PATIENT_INFO,
+	    PATIENT_INBOX
 	}
 	
 	public static void switchView(Views newView) {
@@ -65,6 +66,8 @@ public class ViewController {
 			case PATIENT_INFO:
 				view = PATIENT_INFO_VIEW;
 				break;
+			case PATIENT_INBOX:
+				view = PATIENT_INBOX_VIEW;
 			default:
 				System.out.println("ViewController: No view option for " + newView.toString());
 				break;

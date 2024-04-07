@@ -14,12 +14,17 @@ import java.util.Scanner;
 import javafx.scene.control.TextField;
 
 public class LoginSystem {
+	public static String username = "";
 	public void SaveInfo(String filename, String[] fieldText) {
 		try {													   
 			String filepath = "src\\Logins\\" + filename + ".txt";
 			File f = new File(filepath);
 			if(f.createNewFile()) {
 				System.out.println("\n\n\n\n\nFile created: " + f.getName() + "\n\n\n\n");
+				MessageSystem newMSG = new MessageSystem();
+				ArrayList<String> new_person = new ArrayList<String>();
+				new_person.add("Welcome!");
+				newMSG.addMessage(filename, new_person);
 			} else {
 				System.out.println("File already exists.");
 			}
@@ -54,9 +59,10 @@ public class LoginSystem {
 			String str = scnr.nextLine();
 			if (!str.equals(password)) {
 				scnr.close();
-				return null;
+				return new ArrayList<String>();
 			}
 			allData.add(str);
+			username = filename;
 			/*
 				for (int i = 0; i < 6; i++) {
 					String str = scnr.nextLine(); // loading in the patient info
@@ -71,9 +77,16 @@ public class LoginSystem {
 		} catch(FileNotFoundException e) {
 			System.out.println("No file found.");
 			e.printStackTrace();
-			return null;
+			return allData;
 		}
 		return allData;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String str) {
+		username = str;
 	}
 	
 }

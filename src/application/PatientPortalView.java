@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 
 import application.ViewController.Views;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -20,6 +21,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class PatientPortalView extends View {
 	Label title;
@@ -54,9 +60,34 @@ public class PatientPortalView extends View {
 	Button btnVisits;
 	
 	Button btnSignOut;
+	MessageSystem logs = new MessageSystem();
+	LoginSystem check = new LoginSystem();
+	String user = check.getUsername();
+
+
+
+private void startBackgroundUpdate() {
+    Timeline timeline = new Timeline(
+        new KeyFrame(Duration.seconds(1), event -> {
+    		user = check.getUsername();
+    		if (user != "") {
+        		if (new MessageSystem().loadMessages(user) != null) {
+        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
+        			ObservableList<String> mail = FXCollections.observableArrayList(checker); 
+        			lstMail.setItems(mail);	
+        		}
+    		}
+
+        })
+    );
+    timeline.setCycleCount(Timeline.INDEFINITE);
+    timeline.play();
+}
+	
 	
 	@Override
 	public Parent generate() {
+		startBackgroundUpdate();	
 		title = new Label("Patient Portal");
 		title.setFont(Font.font("Arial", 30));
 		
@@ -96,11 +127,10 @@ public class PatientPortalView extends View {
 		lstMail = new ListView<>();
 		//ObservableList<String> mail = FXCollections.observableArrayList(
 				//"Msg 1", "Msg 2", "Msg 3", "Msg 4", "Msg 5", "Msg 6", "Msg 7");
-		MessageSystem logs = new MessageSystem();
-		ObservableList<String> mail = FXCollections.observableArrayList(logs.loadMessages("ncorwins")); // currently just loading from me, but this should be updated
-		lstMail.setItems(mail);																			// to whoever is logged in
-		lstMail.setPrefSize(200, 150);
+
+																	
 		btnNewMsg = new Button("New Message");
+		btnNewMsg.setOnAction(e -> ViewController.switchView(Views.PATIENT_INBOX));
 		mailLayout.getChildren().addAll(lblMail, lstMail, btnNewMsg);
 		
 		VBox contactLayout = new VBox(5);

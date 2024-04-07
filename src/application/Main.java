@@ -18,14 +18,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Project");
-		LoginSystem testLogin = new LoginSystem();
-		MessageSystem testMessage = new MessageSystem();
-		String[] info = {"cmud77", "a", "b", "C"};
-		ArrayList<String> logs = new ArrayList<String>();
-		logs.add("P: HELLO DOCTOR");
-		logs.add("D: HELLO PATIENT");
-		//testMessage.addMessage("ncorwins", logs);
-		testLogin.SaveInfo("ncorwins", info);
 		mainScene = new Scene(new Pane(), WINDOW_WIDTH, WINDOW_HEIGHT);
 		ViewController.switchView(Views.INITIAL);
 		

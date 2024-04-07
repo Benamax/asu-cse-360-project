@@ -107,7 +107,7 @@ public class LoginView extends View {
 		// TODO: Interface with login system to confirm credentials.
 		LoginSystem login = new LoginSystem();
 		if(loginType == LoginType.PATIENT) {
-			if (login.LoadInfo(username, password) != null) {
+			if (login.LoadInfo(username, password).size() != 0) {
 				ViewController.switchView(Views.PATIENT_PORTAL);
 				System.out.println("Login Successful");
 			}
@@ -116,7 +116,7 @@ public class LoginView extends View {
 			}
 
 		} else if(loginType == LoginType.STAFF) {
-			if (login.LoadInfo(username, password) != null) {
+			if (login.LoadInfo(username, password).size() != 0) {
 				ViewController.switchView(Views.STAFF_PORTAL);
 				System.out.println("Login Successful");
 			}

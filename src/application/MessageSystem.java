@@ -14,6 +14,7 @@ import java.util.Scanner;
 import javafx.scene.control.TextField;
 
 public class MessageSystem {
+	public static String username = "";
 	public void addMessage(String filename, ArrayList<String> chatLogs) {
 		try {													   
 			String filepath = "src\\Messages\\" + filename + ".txt";
@@ -69,7 +70,7 @@ public class MessageSystem {
 		} catch(FileNotFoundException e) {
 			System.out.println("No file found.");
 			e.printStackTrace();
-			return null;
+			return allData;
 		}
 		return allData;
 	}
