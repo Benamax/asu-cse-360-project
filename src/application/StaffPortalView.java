@@ -26,6 +26,7 @@ public class StaffPortalView extends View {
 		inboxButton.setFont(Font.font("Arial", 16));
 		Button viewSchedule = new Button("View Schedule");
 		viewSchedule.setFont(Font.font("Arial", 16));
+		viewSchedule.setOnAction(e -> ViewController.switchView(Views.STAFF_SCHEDULE));
 		Button signOut = new Button("Sign Out");
 		signOut.setFont(Font.font("Arial", 16));
 		signOut.setOnAction(e -> ViewController.switchView(Views.INITIAL));
