@@ -77,8 +77,8 @@ public class NewPatientView  extends View{
 		backButton.setFont(btnFont);
 		addButton.setFont(btnFont);
 		
-		backButton.setOnAction(e -> ViewController.switchView(Views.INITIAL));
-		addButton.setOnAction(e -> ViewController.switchView(Views.INITIAL));
+		backButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
+		addButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
 		
 		firstNameLayout.getChildren().addAll(enterFirst, firstName);
 		lastNameLayout.getChildren().addAll(enterLast, lastName);
