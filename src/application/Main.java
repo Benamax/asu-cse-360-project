@@ -1,7 +1,5 @@
 package application;
 	
-import java.util.ArrayList;
-
 import application.ViewController.Views;
 import javafx.application.Application;
 import javafx.stage.Stage;

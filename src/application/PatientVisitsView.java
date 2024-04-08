@@ -1,6 +1,7 @@
 package application;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -56,17 +57,9 @@ public class PatientVisitsView extends View {
 		infoBox.getChildren().addAll(lblInfo, tfInfo);
 		infoBox.setAlignment(Pos.CENTER_RIGHT);
 		
-		btnNew = new Button("New Visit");
-		btnNew.setPrefSize(150, 50);
-		btnNew.setOnAction(e -> ViewController.switchView(Views.EDIT_VISIT));
-		
-		btnEdit = new Button("Edit Visit");
-		btnEdit.setPrefSize(150, 50);
-		btnEdit.setOnAction(e -> ViewController.switchView(Views.EDIT_VISIT));
-		
-		btnExit = new Button("Back");
-		btnExit.setPrefSize(150, 50);
-		btnExit.setOnAction(e -> ViewController.switchView(Views.PATIENT_PORTAL));
+		btnNew = CommonControls.createButton("New Visit", Views.EDIT_VISIT);
+		btnEdit = CommonControls.createButton("Edit Visit", Views.EDIT_VISIT);
+		btnExit = CommonControls.createButton("Back", Views.PATIENT_PORTAL);
 		
 		stackPane.getChildren().addAll(lblTitle, calendarGrid, infoBox, btnExit);
 		StackPane.setAlignment(lblTitle, Pos.TOP_CENTER);
@@ -88,11 +81,15 @@ public class PatientVisitsView extends View {
 			tfInfo.setPrefHeight(300);
 			tfInfo.setMaxHeight(300);
 			
+			btnExit.setOnAction(e -> ViewController.switchView(Views.PATIENT_PORTAL));
+			
 			// TODO: Remove buttons
 		} else if(p == Perspective.STAFF){
 			tfInfo.setMinHeight(150);
 			tfInfo.setPrefHeight(150);
 			tfInfo.setMaxHeight(150);
+			
+			btnExit.setOnAction(e -> ViewController.switchView(Views.PATIENT_INFO));
 			
 			// TODO: Add buttons
 		}

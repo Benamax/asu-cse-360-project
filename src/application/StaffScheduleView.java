@@ -2,6 +2,7 @@ package application;
 
 import application.PatientVisitsView.DatePane;
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -39,23 +40,22 @@ public class StaffScheduleView extends View {
 		lblTitle = new Label("Schedule");
 		lblTitle.setFont(Font.font("Arial", 36));
 		
+		
+		// Calendar
 		calendarGrid = createCalendar();
 		calendarGrid.setAlignment(Pos.BOTTOM_LEFT);
 		calendarGrid.setPadding(new Insets(0, 0, 50, 50));
 		
-		btnBack = new Button("Back");
-		btnBack.setPrefSize(150, 50);
-		btnBack.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
 		
-		btnAddEvent = new Button("Add Event");
-		btnAddEvent.setPrefSize(150, 50);
-		
-		btnEditEvent = new Button("Edit Event");
-		btnEditEvent.setPrefSize(150, 50);
+		// Buttons
+		btnAddEvent = CommonControls.createButton("Add Event", e -> System.out.println("TODO: Add \"AddEvent\" functionality"));
+		btnEditEvent = CommonControls.createButton("Edit Event", e -> System.out.println("TODO: Add \"EditEvent\" functionality"));
+		btnBack = CommonControls.createButton("Back", Views.STAFF_PORTAL);
 		
 		buttonsOnRight = new VBox(btnAddEvent, btnEditEvent);
 		buttonsOnRight.setSpacing(10);
 		buttonsOnRight.setAlignment(Pos.CENTER_RIGHT);
+		
         
 		StackPane.setMargin(buttonsOnRight, new Insets(15));
 		

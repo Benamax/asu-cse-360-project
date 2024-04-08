@@ -1,6 +1,7 @@
 package application;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -52,13 +53,8 @@ public class PatientInformationView extends View {
 				infoGrid.add(newPane.getPane(), i % 3, i / 3);
 			}
 			
-			priorVisitsButton = new Button("Visits");
-			priorVisitsButton.setPrefSize(150, 50);
-			priorVisitsButton.setOnAction(e -> ViewController.switchView(Views.PATIENT_VISITS_STAFF));
-			
-			finishButton = new Button("Finish");
-			finishButton.setPrefSize(150, 50);
-			finishButton.setOnAction(e -> ViewController.switchView(Views.PATIENT_LOOKUP));
+			priorVisitsButton = CommonControls.createButton("Visits", Views.PATIENT_VISITS_STAFF);
+			finishButton = CommonControls.createButton("Finish", Views.PATIENT_LOOKUP);
 			
 			stackPane.getChildren().addAll(titleLabel, infoGrid, priorVisitsButton, finishButton);
 			StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
@@ -95,9 +91,10 @@ public class PatientInformationView extends View {
 				tfInfo.setTranslateY(16);
 				StackPane.setAlignment(tfInfo, Pos.TOP_LEFT);
 				
-				btnToggle = new Button("edit");
+				btnToggle = CommonControls.createButton("edit", e -> switchState(), 50, 25);
+				/*btnToggle = new Button("edit");
 				btnToggle.setOnAction(e -> switchState());
-				btnToggle.setMinWidth(40);
+				btnToggle.setMinWidth(40);*/
 				StackPane.setAlignment(btnToggle, Pos.BOTTOM_RIGHT);
 				
 				stackPane.getChildren().addAll(tfInfo, btnToggle, lblName);
