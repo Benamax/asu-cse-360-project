@@ -199,23 +199,6 @@ public class PatientInboxView extends View{
     		});
 	}
 	
-	private int backButtonHandler(int loc) {
-		if(loc == 1) {
-        	send.setVisible(false);
-        	title.setText("Staff Inbox");
-        	main.setCenter(messageContents);
-        	switchTo++;
-		} 
-		
-		if(switchTo > 1) {
-		 	listView.getSelectionModel().clearSelection();
-		    mailScroller.setContent(listView);
-		 	ViewController.switchView(Views.PATIENT_PORTAL);
-		 	switchTo = 0; 
-		}
-		return 0;
-	} 
-	
 	private String getSender(String messageString) {
 		
 		int colonIndex = messageString.indexOf(':');
