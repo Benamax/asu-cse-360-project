@@ -1,5 +1,8 @@
 package application;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import application.ViewController.Views;
 import common_controls.CommonControls;
 import common_controls.LabeledTextField;
@@ -19,6 +22,10 @@ public class NewPatientView  extends View {
 	
 	Label welcomeTxt;
 	
+	LabeledTextField firstNameField;
+	LabeledTextField lastNameField;
+	LabeledTextField dobField;
+	
 	Button backButton;
 	Button addButton;
 	
@@ -33,13 +40,28 @@ public class NewPatientView  extends View {
 		
 		
 		// Text fields
-		LabeledTextField firstNameField = new LabeledTextField("FIRST NAME");
-		LabeledTextField lastNameField = new LabeledTextField("LAST NAME");
-		LabeledTextField dobField = new LabeledTextField("DATE OF BIRTH");
+		firstNameField = new LabeledTextField("FIRST NAME");
+		lastNameField = new LabeledTextField("LAST NAME");
+		dobField = new LabeledTextField("DATE OF BIRTH");
 		
 		
 		// Buttons
-		addButton = CommonControls.createButton("Add", Views.INITIAL);
+		//addButton = CommonControls.createButton("Add", Views.INITIAL);
+		addButton = CommonControls.createButton("Add", e -> {
+			String patientID = Patient.generateID(
+					firstNameField.getText(),
+					lastNameField.getText(),
+					dobField.getText()
+			);
+			System.out.printf("Patient ID: %s\n", patientID);
+			System.out.printf("File exists: %b\n", Patient.exists(patientID));
+			Patient newPatient = new Patient(
+					firstNameField.getText(),
+					lastNameField.getText(),
+					dobField.getText()
+			);
+			newPatient.save(patientID);
+		});
 		backButton = CommonControls.createButton("Back", Views.INITIAL);
 		
 		
@@ -62,5 +84,4 @@ public class NewPatientView  extends View {
 	public void reset() {
 		
 	}
-
 }

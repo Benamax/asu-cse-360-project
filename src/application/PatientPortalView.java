@@ -60,13 +60,13 @@ public class PatientPortalView extends View {
 	Button btnSignOut;
 	MessageSystem logs = new MessageSystem();
 	LoginSystem check = new LoginSystem();
-	String user = check.getUsername();
+	String user = LoginSystem.getCurrentUsername();
 
 
 	private void startBackgroundUpdate() {
 	    Timeline timeline = new Timeline(
 	        new KeyFrame(Duration.seconds(1), event -> {
-	    		user = check.getUsername();
+	    		user = LoginSystem.getCurrentUsername();
 	    		if (user != "") {
 	        		if (new MessageSystem().loadMessages(user) != null) {
 	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);

@@ -2,6 +2,8 @@ package application;
 	
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -54,7 +56,7 @@ public class LoginView extends View {
 			Button loginButton = CommonControls.createButton("Login", e -> attemptLogin(userField.getText(), passField.getText()));
 			Button backButton = CommonControls.createButton("Back", Views.INITIAL);
 			
-			createButton.setOnAction(e -> ViewController.switchView(Views.ADD_PATIENT));
+			createButton.setOnAction(e -> ViewController.switchView(Views.CREATE_LOGIN));
 			createButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: blue; -fx-font-size: 14px; -fx-underline: true;");
 			
 			
@@ -81,8 +83,39 @@ public class LoginView extends View {
 	}
 	
 	private void attemptLogin(String username, String password) {
+		boolean isLoginSuccess = LoginSystem.attemptLogin(username, password);
+		
+		if(!isLoginSuccess) {
+			Alert loginAlert = new Alert(AlertType.WARNING);
+			loginAlert.setHeaderText("Login unsuccessful");
+			loginAlert.setContentText("Your username and/or password is incorrect.");
+			loginAlert.showAndWait();
+			return;
+		}
+		
+		boolean isStaffLogin = LoginSystem.currentLogin.isStaff;
+		boolean isStaffType = (loginType == LoginType.STAFF);
+		
+		if(isStaffLogin != isStaffType) {
+			Alert loginAlert = new Alert(AlertType.WARNING);
+			loginAlert.setHeaderText("Wrong login type");
+			loginAlert.setContentText("You are logging in as a patient/staff member incorrectly.");
+			loginAlert.showAndWait();
+			
+			LoginSystem.signOut();
+			return;
+		}
+		
+		System.out.println("Login successful");
+		
+		if(isStaffLogin) {
+			ViewController.switchView(Views.STAFF_PORTAL);
+		} else {
+			ViewController.switchView(Views.PATIENT_PORTAL);
+		}
+		
 		// TODO: Interface with login system to confirm credentials.
-		LoginSystem login = new LoginSystem();
+		/*LoginSystem login = new LoginSystem();
 		if(loginType == LoginType.PATIENT) {
 			if (login.LoadInfo(username, password).size() != 0) {
 				ViewController.switchView(Views.PATIENT_PORTAL);
@@ -100,6 +133,6 @@ public class LoginView extends View {
 			else {
 				System.out.println("Login Failed");
 			}
-		}
+		}*/
 	}
 }

@@ -2,25 +2,22 @@ package application;
 
 import application.ViewController.Views;
 import common_controls.CommonControls;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import common_controls.LabeledTextField;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class PatientLookupView extends View {
 	VBox vLayout;
 	HBox hButton;
 	
-	LabeledField firstNameField;
-	LabeledField lastNameField;
-	LabeledField dobField;
+	LabeledTextField firstNameField;
+	LabeledTextField lastNameField;
+	LabeledTextField dobField;
 	
 	Button searchButton;
 	Button backButton;
@@ -37,9 +34,13 @@ public class PatientLookupView extends View {
 		
 		
 		// Text fields
-		firstNameField = new LabeledField("FIRST NAME");
-		lastNameField = new LabeledField("LAST NAME");
-		dobField = new LabeledField("DATE OF BIRTH");
+		firstNameField = new LabeledTextField("FIRST NAME");
+		lastNameField = new LabeledTextField("LAST NAME");
+		dobField = new LabeledTextField("DATE OF BIRTH");
+		
+		firstNameField.setOnAction(e -> lastNameField.requestFocus());
+		lastNameField.setOnAction(e -> dobField.requestFocus());
+		dobField.setOnAction(e -> attemptLookup());
 		
 		
 		// Buttons
@@ -64,47 +65,6 @@ public class PatientLookupView extends View {
 		firstNameField.clear();
 		lastNameField.clear();
 		dobField.clear();
-	}
-	
-	private class LabeledField {
-		VBox root;
-		Label label;
-		TextField textField;
-		
-		public LabeledField(String text) {
-			root = new VBox(5);
-			label = new Label(text);
-			label.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-			textField = new TextField();
-			
-			root.getChildren().addAll(label, textField);
-			root.setAlignment(Pos.CENTER_LEFT);
-			root.setMaxWidth(200);
-		}
-		
-		public VBox getRoot() {
-			return root;
-		}
-		
-		public String getText() {
-			return textField.getText();
-		}
-		
-		public void setText(String text) {
-			textField.setText(text);
-		}
-		
-		public void clear() {
-			textField.clear();
-		}
-	}
-	
-	private Button createButton(String text, EventHandler<ActionEvent> eventHandler) {
-		Button newBtn = new Button(text);
-		newBtn.setPrefSize(150, 50);
-		newBtn.setFont(Font.font("Arial", 14));
-		newBtn.setOnAction(eventHandler);
-		return newBtn;
 	}
 	
 	private void attemptLookup() {
