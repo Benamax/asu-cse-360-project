@@ -1,6 +1,9 @@
 package application;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
+import common_controls.LabeledTextArea;
+import common_controls.LabeledTextField;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
@@ -8,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -41,7 +43,7 @@ public class EditVisitView extends View {
 		
 		
 		for(String smallFieldName : smallFieldNames) {
-			SmallField field = new SmallField(smallFieldName);
+			LabeledTextField field = new LabeledTextField(smallFieldName);
 			smallFields.getChildren().add(field.getRoot());
 		}
 		
@@ -61,7 +63,7 @@ public class EditVisitView extends View {
 		};
 		
 		for(String bigFieldName : bigFieldNames) {
-			BigField field = new BigField(bigFieldName);
+			LabeledTextArea field = new LabeledTextArea(bigFieldName);
 			bigFields.getChildren().add(field.getRoot());
 		}
 		
@@ -75,9 +77,8 @@ public class EditVisitView extends View {
 		VBox dateBox = new VBox(5);
 		dateBox.getChildren().addAll(lblDate, tfDate);
 		
-		btnSave = createButton("Save");
-		btnBack = createButton("Back");
-		//btnBack.setOnAction(e -> ViewController.switchView(Views.PATIENT_VISITS));
+		btnSave = CommonControls.createButton("Save", e -> System.out.println("TODO: Create \"Save\" functionality"));
+		btnBack = CommonControls.createButton("Back", e -> System.out.println("TODO: Create \"Back\" functionality"));
 		
 		HBox fields = new HBox(10);
 		fields.getChildren().addAll(smallFields, bigFields, dateBox);
@@ -98,61 +99,5 @@ public class EditVisitView extends View {
 	@Override
 	public void reset() {
 		
-	}
-	
-	private Button createButton(String text) {
-		Button btn = new Button(text);
-		
-		btn.setMinSize(150, 50);
-		btn.setPrefSize(150, 50);
-		btn.setMaxSize(150, 50);
-		
-		return btn;
-	}
-	
-	class SmallField {
-		VBox vBox;
-		Label label;
-		TextField textField;
-		
-		public SmallField(String name) {
-			label = new Label(name);
-			label.setFont(Font.font("Arial", 14));
-			
-			textField = new TextField();
-			textField.setMinWidth(175);
-			textField.setPrefWidth(175);
-			textField.setMaxWidth(175);
-			
-			vBox = new VBox(5);
-			vBox.getChildren().addAll(label, textField);
-		}
-		
-		public VBox getRoot() {
-			return vBox;
-		}
-	}
-	
-	class BigField {
-		VBox vBox;
-		Label label;
-		TextArea textArea;
-		
-		public BigField(String name) {
-			label = new Label(name);
-			label.setFont(Font.font("Arial", 14));
-			
-			textArea = new TextArea();
-			textArea.setMinSize(400, 100);
-			textArea.setPrefSize(400, 100);
-			textArea.setMaxSize(400, 100);
-			
-			vBox = new VBox(5);
-			vBox.getChildren().addAll(label, textArea);
-		}
-		
-		public VBox getRoot() {
-			return vBox;
-		}
 	}
 }

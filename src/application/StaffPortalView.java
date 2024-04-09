@@ -1,42 +1,29 @@
 package application;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 
 
 public class StaffPortalView extends View {
 	@Override
 	public Parent generate() {
-		VBox vLayout;
 		Label welcomeLabel = new Label("Staff Portal");
-		Button patientLookup = new Button("Patient Lookup");
-		patientLookup.setFont(Font.font("Arial", 16));
-		patientLookup.setOnAction(e -> ViewController.switchView(Views.PATIENT_LOOKUP));
-		Button addNewPatient = new Button("Add New Patient");
-		addNewPatient.setFont(Font.font("Arial", 16));
-		addNewPatient.setOnAction(e -> ViewController.switchView(Views.ADD_PATIENT));
-		Button inboxButton = new Button("Inbox");
-		inboxButton.setFont(Font.font("Arial", 16));
-		Button viewSchedule = new Button("View Schedule");
-		viewSchedule.setFont(Font.font("Arial", 16));
-		viewSchedule.setOnAction(e -> ViewController.switchView(Views.STAFF_SCHEDULE));
-		Button signOut = new Button("Sign Out");
-		signOut.setFont(Font.font("Arial", 16));
-		signOut.setOnAction(e -> ViewController.switchView(Views.INITIAL));
-		
 		welcomeLabel.setFont(Font.font("Arial", 36));
-		vLayout = new VBox(25);
+		
+		Button patientLookup 	= CommonControls.createButton("Patient Lookup", Views.PATIENT_LOOKUP);
+		Button addNewPatient 	= CommonControls.createButton("Add New Patient", Views.ADD_PATIENT);
+		Button inboxButton 		= CommonControls.createButton("Inbox", Views.INBOX);
+		Button viewSchedule 	= CommonControls.createButton("View Schedule", Views.STAFF_SCHEDULE);
+		Button signOut 			= CommonControls.createButton("Sign Out", Views.INITIAL);	// TODO: Call logout method?
+		
+		VBox vLayout = new VBox(25);
 		vLayout.getChildren().addAll(welcomeLabel, patientLookup, addNewPatient, inboxButton, viewSchedule, signOut);
-		
-		inboxButton.setOnAction(e -> ViewController.switchView(Views.INBOX) );
-		
 		vLayout.setAlignment(Pos.CENTER);
 		
 		root = vLayout;
@@ -48,5 +35,4 @@ public class StaffPortalView extends View {
 	public void reset() {
 		
 	}
-	
 }

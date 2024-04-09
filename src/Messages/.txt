@@ -1,3 +1,8 @@
-: hello doctor!
-: hows it going?
-: sup
+ncorwins: hello doctor!
+DOCTOR: Hello ncorwins!
+ncorwins: hello mr. doctor guy!
+DOCTOR: HELLO NCORWINS!!!!
+ncorwins: heyyy
+ncorwins: This reply is to items : 
+ncorwins: ayo wassup man
+ncorwins: 

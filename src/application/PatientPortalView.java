@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,9 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class PatientPortalView extends View {
@@ -62,27 +60,26 @@ public class PatientPortalView extends View {
 	Button btnSignOut;
 	MessageSystem logs = new MessageSystem();
 	LoginSystem check = new LoginSystem();
-	String user = check.getUsername();
+	String user = LoginSystem.getCurrentUsername();
 
 
-
-private void startBackgroundUpdate() {
-    Timeline timeline = new Timeline(
-        new KeyFrame(Duration.seconds(1), event -> {
-    		user = check.getUsername();
-    		if (user != "") {
-        		if (new MessageSystem().loadMessages(user) != null) {
-        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
-        			ObservableList<String> mail = FXCollections.observableArrayList(checker); 
-        			lstMail.setItems(mail);	
-        		}
-    		}
-
-        })
-    );
-    timeline.setCycleCount(Timeline.INDEFINITE);
-    timeline.play();
-}
+	private void startBackgroundUpdate() {
+	    Timeline timeline = new Timeline(
+	        new KeyFrame(Duration.seconds(1), event -> {
+	    		user = LoginSystem.getCurrentUsername();
+	    		if (user != "") {
+	        		if (new MessageSystem().loadMessages(user) != null) {
+	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
+	        			ObservableList<String> mail = FXCollections.observableArrayList(checker); 
+	        			lstMail.setItems(mail);	
+	        		}
+	    		}
+	
+	        })
+	    );
+	    timeline.setCycleCount(Timeline.INDEFINITE);
+	    timeline.play();
+	}
 	
 	
 	@Override
@@ -111,11 +108,8 @@ private void startBackgroundUpdate() {
 		doctorLayout.getChildren().addAll(lblDoctor, imgDoctor, lblDoctorName);
 		doctorLayout.setAlignment(Pos.CENTER);
 		
-		btnVisits = new Button("Prior Visits");
-		btnVisits.setOnAction(e -> ViewController.switchView(Views.PATIENT_VISITS));
-		btnSignOut = new Button("Sign Out");
-		btnSignOut.setPrefSize(150, 40);
-		btnSignOut.setOnAction(e -> ViewController.switchView(Views.INITIAL));
+		btnVisits = CommonControls.createButton("Prior Visits", Views.PATIENT_VISITS);
+		btnSignOut = CommonControls.createButton("Sign Out", Views.INITIAL);	// TODO: Add sign-out from login system?
 		column1.getChildren().addAll(doctorLayout, btnSignOut);
 		column1.setAlignment(Pos.TOP_CENTER);
 		

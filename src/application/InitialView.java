@@ -1,6 +1,7 @@
 package application;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -26,18 +27,8 @@ public class InitialView extends View {
 		welcomeTxt = new Text("Welcome");
 		welcomeTxt.setFont(Font.font("Arial", 26));
 		
-		btnPatient = new Button("Patient Login");
-		btnStaff = new Button("Staff Login");
-		
-		btnPatient.setPrefSize(150, 50);
-		btnStaff.setPrefSize(150, 50);
-		
-		Font btnFont = Font.font("Arial", 14);
-		btnPatient.setFont(btnFont);
-		btnStaff.setFont(btnFont);
-		
-		btnPatient.setOnAction(e -> ViewController.switchView(Views.PATIENT_LOGIN));
-		btnStaff.setOnAction(e -> ViewController.switchView(Views.STAFF_LOGIN));
+		btnPatient = CommonControls.createButton("Patient Login", Views.PATIENT_LOGIN);
+		btnStaff = CommonControls.createButton("Staff Login", Views.STAFF_LOGIN);
 		
 		hBtns.getChildren().addAll(btnPatient, btnStaff);
 		hBtns.setAlignment(Pos.CENTER);

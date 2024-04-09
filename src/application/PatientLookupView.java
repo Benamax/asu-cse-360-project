@@ -1,74 +1,70 @@
 package application;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
+import common_controls.LabeledTextField;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 public class PatientLookupView extends View {
-		
 	VBox vLayout;
 	HBox hButton;
-		
-	TextField firstNameTField;
-	TextField lastNameTField;
-	TextField dobTField;
+	
+	LabeledTextField firstNameField;
+	LabeledTextField lastNameField;
+	LabeledTextField dobField;
 	
 	Button searchButton;
 	Button backButton;
 		
-	Text title;
-	Text firstNameText;
-	Text lastNameText;
-	Text dobText;
+	Label title;
 		
 	@Override
 	public Parent generate() {
+		vLayout = new VBox(25);
+		hButton = new HBox(20);
 		
-		vLayout = new VBox (25);
-		hButton = new HBox (20);
-		
-		title = new Text("Patient Lookup");
+		title = new Label("Patient Lookup");
 		title.setFont(Font.font("Arial", 26));
 		
-		firstNameText = new Text("First Name");
-		lastNameText = new Text("Last Name");
-		dobText = new Text("Date of Birth");
 		
-		firstNameTField = new TextField();
-		firstNameTField.setMaxSize(200,50);
-
-		lastNameTField = new TextField();
-		lastNameTField.setMaxSize(200,50);
-
-		dobTField = new TextField();
-		dobTField.setMaxSize(200,50);
+		// Text fields
+		firstNameField = new LabeledTextField("FIRST NAME");
+		lastNameField = new LabeledTextField("LAST NAME");
+		dobField = new LabeledTextField("DATE OF BIRTH");
 		
-		searchButton = new Button("Search");
-		searchButton.setOnAction(e -> attemptLookup());
-		Font buttonFont = Font.font("Arial", 14);
-		searchButton.setFont(buttonFont);
+		firstNameField.setOnAction(e -> lastNameField.requestFocus());
+		lastNameField.setOnAction(e -> dobField.requestFocus());
+		dobField.setOnAction(e -> attemptLookup());
 		
-		backButton = new Button("Back");
-		backButton.setOnAction(e -> ViewController.switchView(Views.STAFF_PORTAL));
-		backButton.setFont(buttonFont);
 		
-		vLayout.getChildren().addAll(title, firstNameText, firstNameTField, lastNameText, lastNameTField, dobText, dobTField, searchButton, backButton);
+		// Buttons
+		searchButton = CommonControls.createButton("Search", e -> attemptLookup());
+		backButton = CommonControls.createButton("Back", Views.STAFF_PORTAL);
+		
+		hButton.getChildren().addAll(backButton, searchButton);
+		hButton.setAlignment(Pos.CENTER);
+		
+		
+		// Finalize layout
+		vLayout.getChildren().addAll(title, firstNameField.getRoot(), lastNameField.getRoot(), dobField.getRoot(), hButton);
 		vLayout.setAlignment(Pos.CENTER);
 		
 		root = vLayout;
 		root.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #a1ffd3 30%, #ffe5c4 47%);");
 		return root;
-			}
+	}
 
 	@Override
 	public void reset() {
-
+		firstNameField.clear();
+		lastNameField.clear();
+		dobField.clear();
 	}
 	
 	private void attemptLookup() {

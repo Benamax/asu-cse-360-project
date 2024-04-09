@@ -16,11 +16,13 @@ public class ViewController {
 	private static View STAFF_SCHEDULE_VIEW = new StaffScheduleView();
 	private static View EDIT_VISIT_VIEW = new EditVisitView();
 	private static View PATIENT_INBOX_VIEW = new PatientInboxView();
+	private static View CREATE_LOGIN_VIEW = new CreateLoginView();
 	
 	private static View CURRENT_VIEW = null;
 	
 	public enum Views {
 		INITIAL,
+		CREATE_LOGIN,
 		PATIENT_LOGIN,
 		PATIENT_PORTAL,
 		PATIENT_VISITS,
@@ -86,6 +88,9 @@ public class ViewController {
 				break;
 			case PATIENT_INBOX:
 				view = PATIENT_INBOX_VIEW;
+				break;
+			case CREATE_LOGIN:
+				view = CREATE_LOGIN_VIEW;
 				break;
 			default:
 				System.out.println("ViewController: No view option for " + newView.toString());
