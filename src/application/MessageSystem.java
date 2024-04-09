@@ -45,7 +45,7 @@ public class MessageSystem {
 			e.printStackTrace();
 		}
 	}
-	public ArrayList loadMessages(String filename) {
+	public ArrayList<String> loadMessages(String filename) {
 		ArrayList<String> allData = new ArrayList<String>();
 		try {
 			String filepath = "src\\Messages\\" + filename + ".txt";

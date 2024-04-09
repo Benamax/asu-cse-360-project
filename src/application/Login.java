@@ -71,6 +71,7 @@ public class Login {
 		try {
 			Scanner scnr = new Scanner(file);
 			
+			this.username = username;
 			this.password = scnr.nextLine();
 			this.patientID = scnr.nextLine();
 			this.isStaff = scnr.nextBoolean();
