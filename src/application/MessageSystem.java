@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 
 public class MessageSystem {
 	public static String username = "";
-	public void addMessage(String filename, ArrayList<String> chatLogs) {
+	public static void addMessage(String filename, ArrayList<String> chatLogs) {
 		try {													   
 			String filepath = "src\\Messages\\" + filename + ".txt";
 			File f = new File(filepath);
@@ -45,7 +45,7 @@ public class MessageSystem {
 			e.printStackTrace();
 		}
 	}
-	public ArrayList<String> loadMessages(String filename) {
+	public static ArrayList<String> loadMessages(String filename) {
 		ArrayList<String> allData = new ArrayList<String>();
 		try {
 			String filepath = "src\\Messages\\" + filename + ".txt";
@@ -69,7 +69,7 @@ public class MessageSystem {
 			scnr.close();
 		} catch(FileNotFoundException e) {
 			System.out.println("No file found.");
-			e.printStackTrace();
+			//e.printStackTrace();
 			return allData;
 		}
 		return allData;
