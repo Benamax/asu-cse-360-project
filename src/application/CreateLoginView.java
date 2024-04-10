@@ -134,7 +134,12 @@ public class CreateLoginView extends View {
 		root = stackRoot;
 		return root;
 	}
-
+	
+	@Override
+	public void onEnter() {
+		
+	}
+	
 	@Override
 	public void reset() {
 		

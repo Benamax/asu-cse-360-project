@@ -105,5 +105,7 @@ public class ViewController {
 		
 		CURRENT_VIEW = view;
 		Main.mainScene.setRoot(view.getRoot());
+		
+		CURRENT_VIEW.onEnter();
 	}
 }

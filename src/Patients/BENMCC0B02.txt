@@ -1,6 +1,11 @@
 Benjamin
 McGuire
 12/11/2002
-null
-null
-null
+5012 W Fake Street
+123-456-7891
+benjamin@fakemail.com
+Allergies\nAllergies2
+Health concerns\nHealth concerns2
+Prior health issues\nPrior health issues2
+Medications\nMedications2
+Records\nRecords2

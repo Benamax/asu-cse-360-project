@@ -134,21 +134,24 @@ public class PatientPortalView extends View {
 		lblHomeAddr = new Label("Home Address");
 		tfHomeAddr = new TextField();
 		tfHomeAddr.setPrefWidth(250);
-		btnHomeAddr = new Button("Update");
+		//btnHomeAddr = new Button("Update");
+		btnHomeAddr = CommonControls.createUnsizedButton("Update", e -> updateHomeAddr());
 		homeAddr.getChildren().addAll(tfHomeAddr, btnHomeAddr);
 		
 		HBox phone = new HBox(0);
 		lblPhone = new Label("Phone");
 		tfPhone = new TextField();
 		tfPhone.setPrefWidth(250);
-		btnPhone = new Button("Update");
+		//btnPhone = new Button("Update");
+		btnPhone = CommonControls.createUnsizedButton("Update", e -> updatePhone());
 		phone.getChildren().addAll(tfPhone, btnPhone);
 		
 		HBox email = new HBox(0);
 		lblEmail = new Label("Email");
 		tfEmail = new TextField();
 		tfEmail.setPrefWidth(250);
-		btnEmail = new Button("Update");
+		//btnEmail = new Button("Update");
+		btnEmail = CommonControls.createUnsizedButton("Update", e -> updateEmail());
 		email.getChildren().addAll(tfEmail, btnEmail);
 		
 		contactLayout.getChildren().addAll(lblContact, lblHomeAddr, homeAddr, lblPhone, phone, lblEmail, email);
@@ -190,10 +193,48 @@ public class PatientPortalView extends View {
 		root = columns;
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		tfHomeAddr.setText(patient.homeAddress);
+		tfPhone.setText(patient.phoneNumber);
+		tfEmail.setText(patient.email);
+	}
 
 	@Override
 	public void reset() {
 		
+	}
+	
+	private void updateHomeAddr() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		patient.homeAddress = tfHomeAddr.getText();
+		patient.save(patientID);
+	}
+	
+	private void updatePhone() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		patient.phoneNumber = tfPhone.getText();
+		patient.save(patientID);
+	}
+	
+	private void updateEmail() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		patient.email = tfEmail.getText();
+		patient.save(patientID);
 	}
 
 }

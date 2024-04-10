@@ -22,6 +22,9 @@ public class PatientInformationView extends View {
 		Button finishButton;
 		
 		Label titleLabel;
+		
+		InfoPane[] infoPanes;
+		String[] infoTitles;
 			
 		@Override
 		public Parent generate() {
@@ -35,7 +38,7 @@ public class PatientInformationView extends View {
 			titleLabel = new Label("Patient Information");
 			titleLabel.setFont(Font.font("Arial", 36));
 			
-			String[] infoTitles = {
+			infoTitles = new String[] {
 					"Known Allergies",
 					"Health Concerns",
 					"Prior Health Issues",
@@ -44,12 +47,14 @@ public class PatientInformationView extends View {
 			};
 			
 			GridPane infoGrid = new GridPane();
+			infoPanes = new InfoPane[infoTitles.length];
 			infoGrid.setHgap(20);
 			infoGrid.setVgap(10);
 			infoGrid.setAlignment(Pos.CENTER_LEFT);
 			infoGrid.setTranslateX(60);
 			for(int i = 0; i < infoTitles.length; i++) {
 				InfoPane newPane = new InfoPane(infoTitles[i]);
+				infoPanes[i] = newPane;
 				infoGrid.add(newPane.getPane(), i % 3, i / 3);
 			}
 			
@@ -104,10 +109,19 @@ public class PatientInformationView extends View {
 				return stackPane;
 			}
 			
-			private void switchState() {
+			public String getText() {
+				return tfInfo.getText();
+			}
+			
+			public void setText(String text) {
+				tfInfo.setText(text);
+			}
+			
+			public void switchState() {
 				if(!tfInfo.isEditable()) {	// Switches to edit state is currently in view state
 					tfInfo.setEditable(true);	// Make text field editable
 					tfInfo.requestFocus();		// Focuses the text field, so the user can start typing without selecting it
+					tfInfo.positionCaret(tfInfo.getText().length());	// Put caret (text cursor) at end of text
 					btnToggle.setText("save");	// Switch button text
 				} else {					// Switches to view state if currently in edit state
 					tfInfo.setEditable(false);
@@ -115,10 +129,41 @@ public class PatientInformationView extends View {
 				}
 			}
 		}
-	@Override
-		public void reset() {
-			// TODO Auto-generated method stub
-
+		
+		@Override
+		public void onEnter() {
+			Patient patient = PatientSystem.currentPatient;
+			findPane("Known Allergies").setText(patient.allergies);
+			findPane("Health Concerns").setText(patient.healthConcerns);
+			findPane("Prior Health Issues").setText(patient.priorIssues);
+			findPane("Prescribed Medications").setText(patient.medications);
+			findPane("Immunization Records").setText(patient.records);
 		}
-	
+		
+		@Override
+		public void reset() {
+			Patient patient = PatientSystem.currentPatient;
+			
+			patient.allergies = infoPanes[0].getText();
+			patient.healthConcerns = infoPanes[1].getText();
+			patient.priorIssues = infoPanes[2].getText();
+			patient.medications = infoPanes[3].getText();
+			patient.records = infoPanes[4].getText();
+			
+			patient.save(patient.getPatientID());
+		}
+		
+		public InfoPane findPane(String title) {
+			int i = 0;
+			for(i = 0; i < infoTitles.length; i++) {
+				if(infoTitles[i].equals(title))
+					break;
+				
+				// If on last title without success, return null
+				if(i == infoTitles.length)
+					return null;
+			}
+			
+			return infoPanes[i];
+		}
 	}

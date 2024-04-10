@@ -35,6 +35,16 @@ public class CommonControls {
 		return newBtn;
 	}
 	
+	public static Button createUnsizedButton(String text, EventHandler<ActionEvent> eventHandler) {
+		Button newBtn = new Button(text);
+		
+		newBtn.setFont(BUTTON_FONT);
+		newBtn.setOnAction(eventHandler);
+		newBtn.setStyle("-fx-background-color: #000000; -fx-border-color: #02114f; -fx-text-fill: #ffffff;");
+		
+		return newBtn;
+	}
+	
 	public static void changeControlSize(Region control, int width, int height) {
 		control.setMinSize(width, height);
 		control.setPrefSize(width, height);

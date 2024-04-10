@@ -95,6 +95,11 @@ public class EditVisitView extends View {
 		root = main;
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		
+	}
 
 	@Override
 	public void reset() {

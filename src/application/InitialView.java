@@ -39,6 +39,11 @@ public class InitialView extends View {
 		root = vLayout;
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		
+	}
 
 	@Override
 	public void reset() {

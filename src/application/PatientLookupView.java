@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -59,6 +61,11 @@ public class PatientLookupView extends View {
 		root.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #a1ffd3 30%, #ffe5c4 47%);");
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		
+	}
 
 	@Override
 	public void reset() {
@@ -68,7 +75,23 @@ public class PatientLookupView extends View {
 	}
 	
 	private void attemptLookup() {
-		// TODO: Check if patient actually exists
+		String patientID = Patient.generateID(
+				firstNameField.getText(),
+				lastNameField.getText(),
+				dobField.getText()
+		);
+		
+		if(!Patient.exists(patientID)) {
+			Alert patientAlert = new Alert(AlertType.WARNING);
+			patientAlert.setHeaderText("Invalid information");
+			patientAlert.setContentText("There is no patient with that information.");
+			patientAlert.showAndWait();
+			return;
+		}
+		
+		Patient newPatient = new Patient();
+		newPatient.load(patientID);
+		PatientSystem.currentPatient = newPatient;
 		
 		ViewController.switchView(Views.PATIENT_INFO);
 	}

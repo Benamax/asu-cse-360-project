@@ -30,6 +30,11 @@ public class StaffPortalView extends View {
 		root.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #a1ffd3 30%, #ffe5c4 47%);");
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		
+	}
 
 	@Override
 	public void reset() {

@@ -299,6 +299,11 @@ public class PatientInboxView extends View{
 		
 	}
 	
+	@Override
+	public void onEnter() {
+		
+	}
+	
 	public void reset() {
 		
 	}

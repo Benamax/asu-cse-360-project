@@ -73,6 +73,12 @@ public class LoginView extends View {
 			return root;
 	}
 	
+	@Override
+	public void onEnter() {
+		
+	}
+	
+	@Override
 	public void reset() {
 		userField.clear();
 		passField.clear();
