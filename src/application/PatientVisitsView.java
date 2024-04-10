@@ -2,11 +2,14 @@ package application;
 
 import application.ViewController.Views;
 import common_controls.CommonControls;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -28,14 +31,22 @@ public class PatientVisitsView extends View {
 	Button btnAddEvent;
 	Button btnEditEvent;
 	
+	ObservableList<String> appointments;
+	ListView<String> listOfAppointments;
+	
+	TextField inputTField;
+		
 	private Perspective perspective;
 	public enum Perspective {
 		PATIENT,
 		STAFF
 	}
 	
+	
 	@Override
 	public Parent generate() {
+		appointments = FXCollections.observableArrayList();
+		
 		StackPane stackPane = new StackPane();
 		stackPane.setMinSize(1100, 700);
 		stackPane.setPrefSize(1100, 700);
@@ -55,20 +66,29 @@ public class PatientVisitsView extends View {
 		tfInfo.setMaxSize(250, 300);
 		infoBox.getChildren().addAll(lblInfo, tfInfo);
 		infoBox.setAlignment(Pos.CENTER_RIGHT);
+				
+		inputTField = new TextField();
+		inputTField.setMaxWidth(750);
+		inputTField.setMaxHeight(50);
+		
+		listOfAppointments = new ListView<>(appointments);
+		listOfAppointments.setMaxSize(750, 350);
 		
 		btnNew = CommonControls.createButton("New Visit", Views.EDIT_VISIT);
 		btnEdit = CommonControls.createButton("Edit Visit", Views.EDIT_VISIT);
 		btnExit = CommonControls.createButton("Back", Views.PATIENT_PORTAL);
 		
-		btnAddEvent = CommonControls.createButton("Add Event", e -> System.out.println("Add Event"));
-		btnEditEvent = CommonControls.createButton("Edit Event", e -> System.out.println("Edit Event"));
+		btnAddEvent = CommonControls.createButton("Add Event", e -> addEvent());
+		btnEditEvent = CommonControls.createButton("Edit Event", e -> editEvent());
 		
-		stackPane.getChildren().addAll(lblTitle, infoBox, btnAddEvent, btnEditEvent, btnExit);
+		stackPane.getChildren().addAll(lblTitle, btnAddEvent, btnEditEvent, btnExit, inputTField,listOfAppointments);
 		StackPane.setAlignment(lblTitle, Pos.TOP_CENTER);
-		StackPane.setAlignment(infoBox, Pos.CENTER_RIGHT);
 		StackPane.setAlignment(btnAddEvent, Pos.CENTER_LEFT);
 		StackPane.setAlignment(btnEditEvent, Pos.BOTTOM_LEFT);
 		StackPane.setAlignment(btnExit, Pos.TOP_LEFT);
+		StackPane.setAlignment(inputTField, Pos.BOTTOM_RIGHT);
+		StackPane.setAlignment(listOfAppointments, Pos.CENTER_RIGHT);
+
 	
 		stackPane.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #ffe485 30%, #ffe5c4 47%);");
 		
@@ -80,6 +100,25 @@ public class PatientVisitsView extends View {
 	public void reset() {
 
 	}
+	
+	private void addEvent() {
+		String newEvent = inputTField.getText().trim();
+		if(!inputTField.getText().isEmpty()){
+			appointments.add(newEvent);
+			inputTField.clear();
+		}
+	}
+	
+	private void editEvent() {
+		String selectedEvent = listOfAppointments.getSelectionModel().getSelectedItem();
+		if (selectedEvent != null) {
+			int selectedEventIndex = listOfAppointments.getSelectionModel().getSelectedIndex();
+			String editedEvent = inputTField.getText().trim();
+			appointments.set(selectedEventIndex, editedEvent);
+			inputTField.clear();
+		}
+	}
+	
 	
 	public void changePerspective(Perspective p) {
 		if(p == Perspective.PATIENT) {
@@ -102,22 +141,7 @@ public class PatientVisitsView extends View {
 		
 		perspective = p;
 	}
-	
-	private GridPane createCalendar() {
-		GridPane calGrid = new GridPane();
-		calGrid.setGridLinesVisible(true);
-		
-		int day = 1;
-		for(int row = 0; row < 5; row++) {
-			for(int column = 0; column < 7; column++) {
-				DatePane datePane = new DatePane(90, Integer.toString(day++));
-				calGrid.add(datePane.getPane(), column, row);
-			}
-		}
-		
-		return calGrid;
-	}
-	
+
 	public class DatePane {
 		StackPane stackPane;
 		Label lblDate;
