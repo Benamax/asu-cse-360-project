@@ -1,5 +1,7 @@
 package application;
 
+import java.util.List;
+
 import application.ViewController.Views;
 import common_controls.CommonControls;
 import javafx.collections.FXCollections;
@@ -93,7 +95,7 @@ public class PatientVisitsView extends View {
 	
 	@Override
 	public void onEnter() {
-		
+		loadVisits();
 	}
 
 	@Override
@@ -101,10 +103,28 @@ public class PatientVisitsView extends View {
 		
 	}
 	
+	private void loadVisits() {
+		System.out.println("Loading visits from file system");
+		List<String> visitNames = VisitSystem.loadVisitNames(PatientSystem.currentPatient.getPatientID());
+		if(visitNames.size() > 0) {
+			System.out.println("Found visits, adding to view");
+			visits = FXCollections.observableArrayList(visitNames);
+			for(String visit : visits) {
+				System.out.println(visit);
+			}
+			visitListView.setItems(visits);
+			visitListView.refresh();
+		}
+	}
+	
 	private void addVisit() {
 		String newEvent = inputTField.getText().trim();
 		if(!inputTField.getText().isEmpty()) {
-			visits.add(newEvent);
+			Visit newVisit = new Visit(newEvent);
+			newVisit.patientID = PatientSystem.currentPatient.getPatientID();
+			newVisit.save();
+			
+			loadVisits();
 			inputTField.clear();
 		}
 	}
@@ -136,8 +156,13 @@ public class PatientVisitsView extends View {
 			
 			btnExit.setOnAction(e -> ViewController.switchView(Views.PATIENT_INFO));
 			
-			stackPane.getChildren().addFirst(btnAddVisit);
-			stackPane.getChildren().addFirst(btnEditVisit);
+			if(!stackPane.getChildren().contains(btnAddVisit)) {
+				stackPane.getChildren().addFirst(btnAddVisit);
+			}
+			
+			if(!stackPane.getChildren().contains(btnEditVisit)) {
+				stackPane.getChildren().addFirst(btnEditVisit);
+			}
 		}
 		
 		perspective = p;

@@ -23,6 +23,21 @@ public class Visit {
 	String phyExam;
 	String notes;
 	
+	public Visit() {
+		this.title = "";
+		date = LocalDateTime.now();
+		
+		patientName = "";
+		weight = "";
+		height = "";
+		bodyTemperature = "";
+		bloodPressure = "";
+		
+		reasonFor = "";
+		phyExam = "";
+		notes = "";
+	}
+	
 	public Visit(String title) {
 		this.title = title;
 		date = LocalDateTime.now();
@@ -65,6 +80,7 @@ public class Visit {
 		try {
 			FileWriter fw = new FileWriter(filepath);
 			
+			fw.write(this.title + "\n");
 			fw.write(this.date.toString() + "\n");
 			
 			fw.write(this.patientName + "\n");
@@ -91,6 +107,7 @@ public class Visit {
 		try {
 			Scanner scnr = new Scanner(file);
 			
+			this.title = scnr.nextLine();
 			this.date = LocalDateTime.parse(scnr.nextLine());
 			
 			this.patientName = scnr.nextLine();
