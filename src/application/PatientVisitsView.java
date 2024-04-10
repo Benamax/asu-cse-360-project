@@ -25,6 +25,9 @@ public class PatientVisitsView extends View {
 	Button btnEdit;
 	Button btnExit;
 	
+	Button btnAddEvent;
+	Button btnEditEvent;
+	
 	private Perspective perspective;
 	public enum Perspective {
 		PATIENT,
@@ -42,10 +45,6 @@ public class PatientVisitsView extends View {
 		lblTitle = new Label("Prior Visits");
 		lblTitle.setFont(Font.font("Arial", 36));
 		
-		calendarGrid = createCalendar();
-		calendarGrid.setAlignment(Pos.BOTTOM_LEFT);
-		calendarGrid.setPadding(new Insets(0, 0, 50, 50));
-		
 		VBox infoBox = new VBox(5);
 		lblInfo = new Label("Information");
 		lblInfo.setFont(Font.font("Arial", 26));
@@ -61,10 +60,17 @@ public class PatientVisitsView extends View {
 		btnEdit = CommonControls.createButton("Edit Visit", Views.EDIT_VISIT);
 		btnExit = CommonControls.createButton("Back", Views.PATIENT_PORTAL);
 		
-		stackPane.getChildren().addAll(lblTitle, calendarGrid, infoBox, btnExit);
+		btnAddEvent = CommonControls.createButton("Add Event", e -> System.out.println("Add Event"));
+		btnEditEvent = CommonControls.createButton("Edit Event", e -> System.out.println("Edit Event"));
+		
+		stackPane.getChildren().addAll(lblTitle, infoBox, btnAddEvent, btnEditEvent, btnExit);
 		StackPane.setAlignment(lblTitle, Pos.TOP_CENTER);
 		StackPane.setAlignment(infoBox, Pos.CENTER_RIGHT);
+		StackPane.setAlignment(btnAddEvent, Pos.CENTER_LEFT);
+		StackPane.setAlignment(btnEditEvent, Pos.BOTTOM_LEFT);
 		StackPane.setAlignment(btnExit, Pos.TOP_LEFT);
+	
+		stackPane.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #ffe485 30%, #ffe5c4 47%);");
 		
 		root = stackPane;
 		return root;
