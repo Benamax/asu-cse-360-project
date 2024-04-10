@@ -142,12 +142,10 @@ public class Patient {
 	}
 	
 	private String encodeNewline(String in) {
-		//return in.replace('\n', '\a');
 		return in.replace("\n", "\\n");
 	}
 	
 	private String decodeNewline(String in) {
-		//return in.replace('\0', '\n');
 		return in.replace("\\n", "\n");
 	}
 }

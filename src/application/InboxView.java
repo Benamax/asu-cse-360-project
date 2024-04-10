@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import application.ViewController.Views;
 import javafx.animation.KeyFrame;
@@ -71,14 +72,22 @@ public class InboxView extends View{
 	        new KeyFrame(Duration.seconds(1), event -> {
 	    		user = LoginSystem.getCurrentUsername();
 	    		if (user != "") {
-	        		if (new MessageSystem().loadMessages(user) != null) {
+	    			if(!MessageSystem.loadMessages(user).isEmpty()) {
+	    				List<String> msgNames = MessageSystem.loadMessageNames(user);
+	    				checking = FXCollections.observableArrayList(msgNames);
+	    				if(checking.equals(mail) == false) {
+	    					mail = checking;
+	    				}
+	    				listView.setItems(mail);
+	    			}
+	        		/*if (new MessageSystem().loadMessages(user) != null) {
 	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
 	        			checking = FXCollections.observableArrayList(checker);
 	        			if(checking.equals(mail) == false) {
 	        				mail = checking;
 	        			}
 	        			listView.setItems(mail);
-	        		}
+	        		}*/
 	    		}
 	        })
 	    );
@@ -204,7 +213,9 @@ public class InboxView extends View{
 	}
 	
 	private void sendButtonMethod() {
-		if (new MessageSystem().loadMessages(user) != null && new MessageSystem().loadMessages(senderEmail.getText()) != null) {
+		MessageSystem.sendMessage("Example Title", composeMessage.getText(), senderEmail.getText());
+		
+		/*if (new MessageSystem().loadMessages(user) != null && new MessageSystem().loadMessages(senderEmail.getText()) != null) {
 			// SENDER
     		ArrayList<String> logListSender = new MessageSystem().loadMessages(user);
     		logListSender.add(user + ": " + composeMessage.getText());
@@ -214,7 +225,7 @@ public class InboxView extends View{
     		ArrayList<String> logListReceiever = new MessageSystem().loadMessages(senderEmail.getText());
     		logListReceiever.add(user + ": " + composeMessage.getText());
     		new MessageSystem().addMessage(senderEmail.getText(), logListSender);
-		}
+		}*/
     	send.setVisible(false);
 	}
 	

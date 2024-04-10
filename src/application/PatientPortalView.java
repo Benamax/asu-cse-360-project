@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import application.ViewController.Views;
 import common_controls.CommonControls;
@@ -58,7 +59,7 @@ public class PatientPortalView extends View {
 	Button btnVisits;
 	
 	Button btnSignOut;
-	MessageSystem logs = new MessageSystem();
+	/*MessageSystem logs = new MessageSystem();
 	LoginSystem check = new LoginSystem();
 	String user = LoginSystem.getCurrentUsername();
 
@@ -79,12 +80,12 @@ public class PatientPortalView extends View {
 	    );
 	    timeline.setCycleCount(Timeline.INDEFINITE);
 	    timeline.play();
-	}
+	}*/
 	
 	
 	@Override
 	public Parent generate() {
-		startBackgroundUpdate();	
+		//startBackgroundUpdate();	
 		title = new Label("Patient Portal");
 		title.setFont(Font.font("Arial", 30));
 		
@@ -203,6 +204,11 @@ public class PatientPortalView extends View {
 		tfHomeAddr.setText(patient.homeAddress);
 		tfPhone.setText(patient.phoneNumber);
 		tfEmail.setText(patient.email);
+		
+		// Get messages
+		List<String> msgNames = MessageSystem.loadMessageNames(LoginSystem.currentLogin.username);
+		ObservableList<String> msgObsList = FXCollections.observableArrayList(msgNames);
+		lstMail.setItems(msgObsList);
 	}
 
 	@Override
