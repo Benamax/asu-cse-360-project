@@ -11,18 +11,33 @@ public class Patient {
 	String firstName;
 	String lastName;
 	String dob;
+	
 	String homeAddress;
 	String phoneNumber;
 	String email;
 	
+	String allergies;
+	String healthConcerns;
+	String priorIssues;
+	String medications;
+	String records;
+	
 	public Patient() {
-		
+		this("", "", "");
 	}
 	
 	public Patient(String first, String last, String dob) {
 		this.firstName = first;
 		this.lastName = last;
 		this.dob = dob;
+		this.homeAddress = "";
+		this.phoneNumber = "";
+		this.email = "";
+		this.allergies = "";
+		this.healthConcerns = "";
+		this.priorIssues = "";
+		this.medications = "";
+		this.records = "";
 	}
 	
 	public static String generateID(String first, String last, String dob) {
@@ -70,9 +85,17 @@ public class Patient {
 			fw.write(this.firstName + "\n");
 			fw.write(this.lastName + "\n");
 			fw.write(this.dob + "\n");
+			
 			fw.write(this.homeAddress + "\n");
 			fw.write(this.phoneNumber + "\n");
 			fw.write(this.email + "\n");
+			
+			fw.write(encodeNewline(this.allergies) + "\n");
+			//fw.write(this.allergies + "\n");
+			fw.write(encodeNewline(this.healthConcerns) + "\n");
+			fw.write(encodeNewline(this.priorIssues) + "\n");
+			fw.write(encodeNewline(this.medications) + "\n");
+			fw.write(encodeNewline(this.records) + "\n");
 			
 			fw.close();
 		} catch(IOException e) {
@@ -91,14 +114,38 @@ public class Patient {
 			this.firstName = scnr.nextLine();
 			this.lastName = scnr.nextLine();
 			this.dob = scnr.nextLine();
+			
 			this.homeAddress = scnr.nextLine();
 			this.phoneNumber = scnr.nextLine();
 			this.email = scnr.nextLine();
+			
+			/*while(scnr.hasNext()) {
+				String next = scnr.next();
+				
+				if(next.contains("ENDL"))
+					break;
+				
+				this.allergies += next;
+			}*/
+			this.allergies = decodeNewline(scnr.nextLine());
+			//this.allergies = scnr.nextLine();
+			this.healthConcerns = decodeNewline(scnr.nextLine());
+			this.priorIssues = decodeNewline(scnr.nextLine());
+			this.medications = decodeNewline(scnr.nextLine());
+			this.records = decodeNewline(scnr.nextLine());
 			
 			scnr.close();
 		} catch(FileNotFoundException e) {
 			System.err.println("Patient: Unable to load file from " + filepath);
 			e.printStackTrace();
 		}
+	}
+	
+	private String encodeNewline(String in) {
+		return in.replace("\n", "\\n");
+	}
+	
+	private String decodeNewline(String in) {
+		return in.replace("\\n", "\n");
 	}
 }

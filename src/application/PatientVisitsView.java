@@ -76,7 +76,7 @@ public class PatientVisitsView extends View {
 		btnAddVisit = CommonControls.createButton("Add Event", e -> addVisit());
 		btnEditVisit = CommonControls.createButton("Edit Event", e -> editVisit());
 		
-		stackPane.getChildren().addAll(lblTitle, btnAddVisit, btnEditVisit, btnExit, inputTField, visitListView);
+		stackPane.getChildren().addAll(lblTitle, btnExit, inputTField, visitListView);
 		StackPane.setAlignment(lblTitle, Pos.TOP_CENTER);
 		StackPane.setAlignment(btnAddVisit, Pos.CENTER_LEFT);
 		StackPane.setAlignment(btnEditVisit, Pos.BOTTOM_LEFT);
@@ -89,6 +89,11 @@ public class PatientVisitsView extends View {
 		
 		root = stackPane;
 		return root;
+	}
+	
+	@Override
+	public void onEnter() {
+		
 	}
 
 	@Override

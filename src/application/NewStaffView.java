@@ -14,7 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class CreateLoginView extends View {
+public class NewStaffView extends View {
 	
 	StackPane stackRoot;
 	Patient currentPatient;
@@ -57,10 +57,10 @@ public class CreateLoginView extends View {
 		hBtns = new HBox(20);
 		hBtns2 = new HBox(20);
 		
-		welcomeTxt = new Label("Create an Account");
+		welcomeTxt = new Label("Create a Staff Account");
 		welcomeTxt.setFont(Font.font("Arial", 26));
 		
-		welcomeTxt2 = new Label("Create an Account");
+		welcomeTxt2 = new Label("Create a Staff Account");
 		welcomeTxt2.setFont(Font.font("Arial", 26));
 		
 		
@@ -81,34 +81,25 @@ public class CreateLoginView extends View {
 					dobField.getText()
 			);
 			
-			if(Patient.exists(patientID)) {
-				Patient newPatient = new Patient();
-				newPatient.load(patientID);
-				currentPatient = newPatient;
-				stackRoot.getChildren().clear();
-				stackRoot.getChildren().add(vLayout2);
-			} else {
-				Alert patientAlert = new Alert(AlertType.WARNING);
-				patientAlert.setHeaderText("Invalid information");
-				patientAlert.setContentText("There is no patient with that information.");
-				patientAlert.showAndWait();
-			}
+			Patient newPatient = new Patient();
+			newPatient.firstName = firstNameField.getText();
+			newPatient.lastName = lastNameField.getText();
+			newPatient.dob = dobField.getText();
+			newPatient.save(patientID);
+			
+			currentPatient = newPatient;
+			
+			stackRoot.getChildren().clear();
+			stackRoot.getChildren().add(vLayout2);
 		});
-		backButton = CommonControls.createButton("Back", Views.INITIAL);
+		backButton = CommonControls.createButton("Back", Views.STAFF_PORTAL);
 		
 		createButton = CommonControls.createButton("Create", e -> {
-			Login newLogin = new Login(userField.getText(), passField.getText(), currentPatient.getPatientID(), false);
+			Login newLogin = new Login(userField.getText(), passField.getText(), currentPatient.getPatientID(), true);
 			newLogin.save(newLogin.username);
-			ViewController.switchView(Views.INITIAL);
+			ViewController.switchView(Views.STAFF_PORTAL);
 		});
-		backButton2 = CommonControls.createButton("Back", e -> {
-			currentPatient = null;
-			firstNameField.clear();
-			lastNameField.clear();
-			dobField.clear();
-			stackRoot.getChildren().clear();
-			stackRoot.getChildren().add(vLayout);
-		});
+		backButton2 = CommonControls.createButton("Back", e -> reset());
 		
 		// Finalize layout
 		fields.getChildren().addAll(firstNameField.getRoot(), lastNameField.getRoot(), dobField.getRoot());
@@ -142,7 +133,14 @@ public class CreateLoginView extends View {
 	
 	@Override
 	public void reset() {
+		currentPatient = null;
 		
+		firstNameField.clear();
+		lastNameField.clear();
+		dobField.clear();
+		
+		stackRoot.getChildren().clear();
+		stackRoot.getChildren().add(vLayout);
 	}
 
 }

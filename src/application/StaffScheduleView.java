@@ -65,6 +65,11 @@ public class StaffScheduleView extends View {
 		root = stackPane;
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		
+	}
 
 	@Override
 	public void reset() {
