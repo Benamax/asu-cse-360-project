@@ -17,6 +17,7 @@ public class ViewController {
 	private static View EDIT_VISIT_VIEW = new EditVisitView();
 	private static View PATIENT_INBOX_VIEW = new PatientInboxView();
 	private static View CREATE_LOGIN_VIEW = new CreateLoginView();
+	private static View NEW_STAFF_VIEW = new NewStaffView();
 	
 	private static View CURRENT_VIEW = null;
 	
@@ -35,7 +36,8 @@ public class ViewController {
 	    PATIENT_INFO,
 	    STAFF_SCHEDULE,
 	    EDIT_VISIT,
-	    PATIENT_INBOX
+	    PATIENT_INBOX,
+	    NEW_STAFF
 	}
 	
 	public static void switchView(Views newView) {
@@ -91,6 +93,9 @@ public class ViewController {
 				break;
 			case CREATE_LOGIN:
 				view = CREATE_LOGIN_VIEW;
+				break;
+			case NEW_STAFF:
+				view = NEW_STAFF_VIEW;
 				break;
 			default:
 				System.out.println("ViewController: No view option for " + newView.toString());

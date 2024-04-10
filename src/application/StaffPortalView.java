@@ -18,12 +18,12 @@ public class StaffPortalView extends View {
 		
 		Button patientLookup 	= CommonControls.createButton("Patient Lookup", Views.PATIENT_LOOKUP);
 		Button addNewPatient 	= CommonControls.createButton("Add New Patient", Views.ADD_PATIENT);
+		Button addNewStaff		= CommonControls.createButton("Add New Staff", Views.NEW_STAFF);
 		Button inboxButton 		= CommonControls.createButton("Inbox", Views.INBOX);
-		Button viewSchedule 	= CommonControls.createButton("View Schedule", Views.STAFF_SCHEDULE);
 		Button signOut 			= CommonControls.createButton("Sign Out", Views.INITIAL);	// TODO: Call logout method?
 		
 		VBox vLayout = new VBox(25);
-		vLayout.getChildren().addAll(welcomeLabel, patientLookup, addNewPatient, inboxButton, viewSchedule, signOut);
+		vLayout.getChildren().addAll(welcomeLabel, patientLookup, addNewPatient, addNewStaff, inboxButton, signOut);
 		vLayout.setAlignment(Pos.CENTER);
 		
 		root = vLayout;
