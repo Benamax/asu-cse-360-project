@@ -78,7 +78,7 @@ public class EditVisitView extends View {
 		dateBox.getChildren().addAll(lblDate, tfDate);
 		
 		btnSave = CommonControls.createButton("Save", e -> System.out.println("TODO: Create \"Save\" functionality"));
-		btnBack = CommonControls.createButton("Back", e -> System.out.println("TODO: Create \"Back\" functionality"));
+		btnBack = CommonControls.createButton("Back", e -> goBack());
 		
 		HBox fields = new HBox(10);
 		fields.getChildren().addAll(smallFields, bigFields, dateBox);
@@ -99,5 +99,13 @@ public class EditVisitView extends View {
 	@Override
 	public void reset() {
 		
+	}
+	
+	private void goBack() {
+		if(LoginSystem.currentLogin.isStaff) {
+			ViewController.switchView(Views.PATIENT_VISITS);
+		} else {
+			ViewController.switchView(Views.PATIENT_VISITS_STAFF);
+		}
 	}
 }

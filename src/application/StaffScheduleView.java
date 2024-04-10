@@ -1,6 +1,5 @@
 package application;
 
-import application.PatientVisitsView.DatePane;
 import application.ViewController.Views;
 import common_controls.CommonControls;
 import javafx.geometry.Insets;
