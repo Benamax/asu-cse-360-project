@@ -8,6 +8,8 @@ import common_controls.CommonControls;
 import common_controls.LabeledTextField;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -48,20 +50,28 @@ public class NewPatientView  extends View {
 		// Buttons
 		//addButton = CommonControls.createButton("Add", Views.INITIAL);
 		addButton = CommonControls.createButton("Add", e -> {
-			String patientID = Patient.generateID(
-					firstNameField.getText(),
-					lastNameField.getText(),
-					dobField.getText()
-			);
-			System.out.printf("Patient ID: %s\n", patientID);
-			System.out.printf("File exists: %b\n", Patient.exists(patientID));
-			Patient newPatient = new Patient(
-					firstNameField.getText(),
-					lastNameField.getText(),
-					dobField.getText()
-			);
-			newPatient.save(patientID);
-		});
+            if(dobField.getText().matches("\\d{2}/\\d{2}/\\d{4}")) {
+                String patientID = Patient.generateID(
+                        firstNameField.getText(),
+                        lastNameField.getText(),
+                        dobField.getText()
+                );
+                System.out.printf("Patient ID: %s\n", patientID);
+                System.out.printf("File exists: %b\n", Patient.exists(patientID));
+                Patient newPatient = new Patient(
+                        firstNameField.getText(),
+                        lastNameField.getText(),
+                        dobField.getText()
+                );
+                newPatient.save(patientID);
+                ViewController.switchView(Views.STAFF_PORTAL);
+            }else {
+                Alert patientAlert = new Alert(AlertType.WARNING);
+                patientAlert.setHeaderText("Invalid DOB Format");
+                patientAlert.setContentText("Format for DOB is dd/mm/yyyy.");
+                patientAlert.showAndWait();
+            }
+        });
 		backButton = CommonControls.createButton("Back", Views.STAFF_PORTAL);
 		
 		
