@@ -86,8 +86,8 @@ public class PatientVisitsView extends View {
 	    });
 		
 		btnExit = CommonControls.createButton("Back", Views.PATIENT_PORTAL);
-		btnAddVisit = CommonControls.createButton("Add Event", e -> addVisit());
-		btnEditVisit = CommonControls.createButton("Edit Event", e -> editVisit());
+		btnAddVisit = CommonControls.createButton("Add Visit", e -> addVisit());
+		btnEditVisit = CommonControls.createButton("Edit Visit", e -> editVisit());
 		
 		stackPane.getChildren().addAll(lblTitle, btnExit, inputTField, visitListView);
 		StackPane.setAlignment(lblTitle, Pos.TOP_CENTER);

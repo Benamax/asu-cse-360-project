@@ -18,6 +18,8 @@ public class LoginView extends View {
 	LabeledTextField userField;
 	LabeledTextField passField;
 	
+	HBox miniHBox;
+	
 	private LoginType loginType;
 	public enum LoginType {
 		PATIENT,
@@ -31,7 +33,7 @@ public class LoginView extends View {
 			Label lblRegistered = new Label("Not registered?");
 			Button createButton = new Button("Create an account");
 			
-			HBox miniHBox = new HBox();
+			miniHBox = new HBox();
 			miniHBox.setAlignment(Pos.CENTER);
 			
 			// Labels
@@ -75,7 +77,11 @@ public class LoginView extends View {
 	
 	@Override
 	public void onEnter() {
-		
+		if(loginType == LoginType.PATIENT) {
+			miniHBox.setVisible(true);
+		} else {
+			miniHBox.setVisible(false);
+		}
 	}
 	
 	@Override
