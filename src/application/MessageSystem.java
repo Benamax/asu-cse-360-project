@@ -20,7 +20,7 @@ public class MessageSystem {
 		File msgFolder = new File("src\\Messages");
 		File[] msgFiles = msgFolder.listFiles();
 		
-		System.out.println("MessageSystem: Trying to find messages for user " + user);
+		//System.out.println("MessageSystem: Trying to find messages for user " + user);
 		
 		List<Message> acceptedMsgs = new ArrayList<Message>();
 		for(File msgFile : msgFiles) {
