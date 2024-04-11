@@ -75,25 +75,32 @@ public class CreateLoginView extends View {
 		
 		// Buttons
 		nextButton = CommonControls.createButton("Next", e -> {
-			String patientID = Patient.generateID(
-					firstNameField.getText(),
-					lastNameField.getText(),
-					dobField.getText()
-			);
-			
-			if(Patient.exists(patientID)) {
-				Patient newPatient = new Patient();
-				newPatient.load(patientID);
-				currentPatient = newPatient;
-				stackRoot.getChildren().clear();
-				stackRoot.getChildren().add(vLayout2);
-			} else {
-				Alert patientAlert = new Alert(AlertType.WARNING);
-				patientAlert.setHeaderText("Invalid information");
-				patientAlert.setContentText("There is no patient with that information.");
-				patientAlert.showAndWait();
-			}
-		});
+            if(dobField.getText().matches("\\d{2}/\\d{2}/\\d{4}")) {
+                String patientID = Patient.generateID(
+                        firstNameField.getText(),
+                        lastNameField.getText(),
+                        dobField.getText()
+                );
+
+                if(Patient.exists(patientID)) {
+                    Patient newPatient = new Patient();
+                    newPatient.load(patientID);
+                    currentPatient = newPatient;
+                    stackRoot.getChildren().clear();
+                    stackRoot.getChildren().add(vLayout2);
+                } else {
+                    Alert patientAlert = new Alert(AlertType.WARNING);
+                    patientAlert.setHeaderText("Invalid information");
+                    patientAlert.setContentText("There is no patient with that information.");
+                    patientAlert.showAndWait();
+                }
+            } else {
+                Alert patientAlert = new Alert(AlertType.WARNING);
+                patientAlert.setHeaderText("Invalid DOB Format");
+                patientAlert.setContentText("Format for DOB is dd/mm/yyyy.");
+                patientAlert.showAndWait();
+            }
+        });
 		backButton = CommonControls.createButton("Back", Views.INITIAL);
 		
 		createButton = CommonControls.createButton("Create", e -> {
