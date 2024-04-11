@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -51,11 +52,9 @@ public class PatientPortalView extends View {
 	TextField tfEmail;
 	Button btnEmail;
 	
-	// Right column (scheduled appointments, previous visits)
-	Label lblAppointments;
-	TextField tfAppointments;
+	// Right column (previous visits)
 	Label lblLastVisit;
-	TextField tfLastVisit;
+	TextArea tfLastVisit;
 	Button btnVisits;
 	
 	Button btnSignOut;
@@ -160,16 +159,13 @@ public class PatientPortalView extends View {
 		
 		
 		VBox column3 = new VBox(5);
-		lblAppointments = new Label("Current Appointments");
-		tfAppointments = new TextField();
-		tfAppointments.setEditable(false);
-		tfAppointments.setPrefSize(200, 150);
 		lblLastVisit = new Label("Last Visit");
-		tfLastVisit = new TextField();
+		tfLastVisit = new TextArea();
 		tfLastVisit.setEditable(false);
-		tfLastVisit.setPrefSize(200, 150);
+		tfLastVisit.setWrapText(true);
+		tfLastVisit.setPrefSize(200, 350);
 		
-		column3.getChildren().addAll(lblAppointments, tfAppointments, lblLastVisit, tfLastVisit, btnVisits);
+		column3.getChildren().addAll(lblLastVisit, tfLastVisit, btnVisits);
 		//column3.setAlignment(Pos.CENTER);
 		
 		
@@ -209,6 +205,13 @@ public class PatientPortalView extends View {
 		List<String> msgNames = MessageSystem.loadMessageNames(LoginSystem.currentLogin.username);
 		ObservableList<String> msgObsList = FXCollections.observableArrayList(msgNames);
 		lstMail.setItems(msgObsList);
+		
+		// Get last visit
+		List<Visit> visits = VisitSystem.loadVisits(patientID);
+		if(visits.size() > 0) {
+			Visit lastVisit = visits.get(0);
+			tfLastVisit.setText(String.format("Reason for Appointment:\n%s\n\nDoctor's Notes:\n%s", lastVisit.reasonFor, lastVisit.notes));
+		}
 	}
 
 	@Override

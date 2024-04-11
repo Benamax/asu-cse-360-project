@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -24,8 +25,9 @@ public class PatientVisitsView extends View {
 	
 	GridPane calendarGrid;
 	
+	VBox infoBox;
 	Label lblInfo;
-	TextField tfInfo;
+	TextArea tfInfo;
 	
 	Button btnAddVisit;
 	Button btnEditVisit;
@@ -56,16 +58,17 @@ public class PatientVisitsView extends View {
 		lblTitle = new Label("Prior Visits");
 		lblTitle.setFont(Font.font("Arial", 36));
 		
-		VBox infoBox = new VBox(5);
+		infoBox = new VBox(5);
 		lblInfo = new Label("Information");
 		lblInfo.setFont(Font.font("Arial", 26));
-		tfInfo = new TextField();
+		tfInfo = new TextArea();
 		tfInfo.setEditable(false);
-		tfInfo.setMinSize(250, 300);
-		tfInfo.setPrefSize(250, 300);
-		tfInfo.setMaxSize(250, 300);
+		tfInfo.setWrapText(true);
+		tfInfo.setMinSize(200, 500);
+		tfInfo.setPrefSize(200, 500);
+		tfInfo.setMaxSize(200, 500);
 		infoBox.getChildren().addAll(lblInfo, tfInfo);
-		infoBox.setAlignment(Pos.CENTER_RIGHT);
+		infoBox.setAlignment(Pos.CENTER_LEFT);
 				
 		inputTField = new TextField();
 		inputTField.setMaxWidth(750);
@@ -73,6 +76,14 @@ public class PatientVisitsView extends View {
 		
 		visitListView = new ListView<>(visits);
 		visitListView.setMaxSize(750, 350);
+		visitListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if(newValue != null) {
+				List<Visit> allVisits = VisitSystem.loadVisits(PatientSystem.currentPatient.getPatientID());
+				int index = visitListView.getSelectionModel().getSelectedIndex();
+				Visit selectedVisit = allVisits.get(index);
+				tfInfo.setText(String.format("Reason for Appointment:\n%s\n\nDoctor's Notes:\n%s", selectedVisit.reasonFor, selectedVisit.notes));
+			}
+	    });
 		
 		btnExit = CommonControls.createButton("Back", Views.PATIENT_PORTAL);
 		btnAddVisit = CommonControls.createButton("Add Event", e -> addVisit());
@@ -85,6 +96,7 @@ public class PatientVisitsView extends View {
 		StackPane.setAlignment(btnExit, Pos.TOP_LEFT);
 		StackPane.setAlignment(inputTField, Pos.BOTTOM_RIGHT);
 		StackPane.setAlignment(visitListView, Pos.CENTER_RIGHT);
+		StackPane.setAlignment(infoBox, Pos.CENTER_LEFT);
 
 	
 		stackPane.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #ffe485 30%, #ffe5c4 47%);");
@@ -133,9 +145,14 @@ public class PatientVisitsView extends View {
 		String selectedEvent = visitListView.getSelectionModel().getSelectedItem();
 		if (selectedEvent != null) {
 			int selectedEventIndex = visitListView.getSelectionModel().getSelectedIndex();
-			String editedEvent = inputTField.getText().trim();
-			visits.set(selectedEventIndex, editedEvent);
-			inputTField.clear();
+			List<Visit> visitObjs = VisitSystem.loadVisits(PatientSystem.currentPatient.getPatientID());
+			Visit visitToEdit = visitObjs.get(selectedEventIndex);
+			PatientSystem.currentVisit = visitToEdit;
+			ViewController.switchView(Views.EDIT_VISIT);
+			
+			//String editedEvent = inputTField.getText().trim();
+			//visits.set(selectedEventIndex, editedEvent);
+			//inputTField.clear();
 		}
 	}
 	
@@ -148,7 +165,13 @@ public class PatientVisitsView extends View {
 			
 			btnExit.setOnAction(e -> ViewController.switchView(Views.PATIENT_PORTAL));
 			
-			stackPane.getChildren().removeAll(btnAddVisit, btnEditVisit);
+			if(stackPane.getChildren().contains(btnAddVisit)) {
+				stackPane.getChildren().removeAll(btnAddVisit, btnEditVisit);
+			}
+			
+			if(!stackPane.getChildren().contains(infoBox)) {
+				stackPane.getChildren().addFirst(infoBox);
+			}
 		} else if(p == Perspective.STAFF) {
 			tfInfo.setMinHeight(150);
 			tfInfo.setPrefHeight(150);
@@ -162,6 +185,10 @@ public class PatientVisitsView extends View {
 			
 			if(!stackPane.getChildren().contains(btnEditVisit)) {
 				stackPane.getChildren().addFirst(btnEditVisit);
+			}
+			
+			if(stackPane.getChildren().contains(infoBox)) {
+				stackPane.getChildren().remove(infoBox);
 			}
 		}
 		

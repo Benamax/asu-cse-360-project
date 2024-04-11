@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Visit {
 	String title;
 	LocalDateTime date;
+	int number;
 	
 	String patientID;
 	
@@ -18,6 +19,7 @@ public class Visit {
 	String height;
 	String bodyTemperature;
 	String bloodPressure;
+	boolean under12;
 	
 	String reasonFor;
 	String phyExam;
@@ -26,12 +28,14 @@ public class Visit {
 	public Visit() {
 		this.title = "";
 		date = LocalDateTime.now();
+		number = -1;
 		
 		patientName = "";
 		weight = "";
 		height = "";
 		bodyTemperature = "";
 		bloodPressure = "";
+		under12 = false;
 		
 		reasonFor = "";
 		phyExam = "";
@@ -41,12 +45,14 @@ public class Visit {
 	public Visit(String title) {
 		this.title = title;
 		date = LocalDateTime.now();
+		number = -1;
 		
 		patientName = "";
 		weight = "";
 		height = "";
 		bodyTemperature = "";
 		bloodPressure = "";
+		under12 = false;
 		
 		reasonFor = "";
 		phyExam = "";
@@ -88,6 +94,34 @@ public class Visit {
 			fw.write(this.height + "\n");
 			fw.write(this.bodyTemperature + "\n");
 			fw.write(this.bloodPressure + "\n");
+			fw.write(this.under12 + "\n");
+			
+			fw.write(encodeNewline(this.reasonFor) + "\n");
+			fw.write(encodeNewline(this.phyExam) + "\n");
+			fw.write(encodeNewline(this.notes) + "\n");
+			
+			fw.close();
+		} catch(IOException e) {
+			System.err.println("Visit: Unable to save file to " + filepath);
+			e.printStackTrace();
+		}
+	}
+	
+	public void save(int number) {
+		String filepath = String.format("src\\Visits\\%s_%d.txt", patientID, number);
+		
+		try {
+			FileWriter fw = new FileWriter(filepath);
+			
+			fw.write(this.title + "\n");
+			fw.write(this.date.toString() + "\n");
+			
+			fw.write(this.patientName + "\n");
+			fw.write(this.weight + "\n");
+			fw.write(this.height + "\n");
+			fw.write(this.bodyTemperature + "\n");
+			fw.write(this.bloodPressure + "\n");
+			fw.write(this.under12 + "\n");
 			
 			fw.write(encodeNewline(this.reasonFor) + "\n");
 			fw.write(encodeNewline(this.phyExam) + "\n");
@@ -109,12 +143,15 @@ public class Visit {
 			
 			this.title = scnr.nextLine();
 			this.date = LocalDateTime.parse(scnr.nextLine());
+			this.number = number;
 			
 			this.patientName = scnr.nextLine();
 			this.weight = scnr.nextLine();
 			this.height = scnr.nextLine();
 			this.bodyTemperature = scnr.nextLine();
 			this.bloodPressure = scnr.nextLine();
+			this.under12 = scnr.nextBoolean();
+			scnr.nextLine();
 			
 			this.reasonFor = decodeNewline(scnr.nextLine());
 			this.phyExam = decodeNewline(scnr.nextLine());

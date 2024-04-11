@@ -23,6 +23,10 @@ public class EditVisitView extends View {
 	
 	Label lblDate;
 	TextField tfDate;
+	CheckBox cbUnderAge;
+	
+	LabeledTextField[] smallFields;
+	LabeledTextArea[] bigFields;
 	
 	Button btnSave;
 	Button btnBack;
@@ -32,7 +36,7 @@ public class EditVisitView extends View {
 		lblTitle = new Label("Visits");
 		lblTitle.setFont(Font.font("Arial", 26));
 		
-		VBox smallFields = new VBox(25);
+		VBox smallFieldBox = new VBox(25);
 		String[] smallFieldNames = {
 				"Patient",
 				"Weight",
@@ -40,32 +44,46 @@ public class EditVisitView extends View {
 				"Body Temperature",
 				"Blood Pressure"
 		};
+		smallFields = new LabeledTextField[smallFieldNames.length];
 		
 		
-		for(String smallFieldName : smallFieldNames) {
+		for(int i = 0; i < smallFieldNames.length; i++) {
+			String smallFieldName = smallFieldNames[i];
 			LabeledTextField field = new LabeledTextField(smallFieldName);
-			smallFields.getChildren().add(field.getRoot());
+			smallFields[i] = field;
+			smallFieldBox.getChildren().add(field.getRoot());
 		}
+		/*for(String smallFieldName : smallFieldNames) {
+			LabeledTextField field = new LabeledTextField(smallFieldName);
+			smallFieldBox.getChildren().add(field.getRoot());
+		}*/
 		
 		// TODO: Make check box bigger with CSS
-		CheckBox cbUnderAge = new CheckBox("Under 12");
+		cbUnderAge = new CheckBox("Under 12");
 		cbUnderAge.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 		HBox cbAlign = new HBox();		// Create an HBox to center align the check box
 		cbAlign.setAlignment(Pos.CENTER);
 		cbAlign.getChildren().add(cbUnderAge);
-		smallFields.getChildren().add(cbAlign);
+		smallFieldBox.getChildren().add(cbAlign);
 		
-		VBox bigFields = new VBox(25);
+		VBox bigFieldBox = new VBox(25);
 		String[] bigFieldNames = {
 				"Reason for Appointment",
 				"Physical Examination",
 				"Notes to Patient"
 		};
+		bigFields = new LabeledTextArea[bigFieldNames.length];
 		
-		for(String bigFieldName : bigFieldNames) {
+		for(int i = 0; i < bigFieldNames.length; i++) {
+			String bigFieldName = bigFieldNames[i];
 			LabeledTextArea field = new LabeledTextArea(bigFieldName);
-			bigFields.getChildren().add(field.getRoot());
+			bigFields[i] = field;
+			bigFieldBox.getChildren().add(field.getRoot());
 		}
+		/*for(String bigFieldName : bigFieldNames) {
+			LabeledTextArea field = new LabeledTextArea(bigFieldName);
+			bigFieldBox.getChildren().add(field.getRoot());
+		}*/
 		
 		lblDate = new Label("Date");
 		lblDate.setFont(Font.font("Arial", 18));
@@ -81,7 +99,7 @@ public class EditVisitView extends View {
 		btnBack = CommonControls.createButton("Back", e -> goBack());
 		
 		HBox fields = new HBox(10);
-		fields.getChildren().addAll(smallFields, bigFields, dateBox);
+		fields.getChildren().addAll(smallFieldBox, bigFieldBox, dateBox);
 		fields.getChildren().forEach(child -> HBox.setHgrow(child, Priority.ALWAYS));
 		
 		StackPane top = new StackPane();
@@ -98,7 +116,7 @@ public class EditVisitView extends View {
 	
 	@Override
 	public void onEnter() {
-		
+		loadVisit();
 	}
 
 	@Override
@@ -106,11 +124,51 @@ public class EditVisitView extends View {
 		
 	}
 	
+	private void loadVisit() {
+		Visit visitToEdit = PatientSystem.currentVisit;
+		
+		System.out.println(visitToEdit.patientName);
+		System.out.println(visitToEdit.weight);
+		System.out.println(visitToEdit.height);
+		
+		smallFields[0].setText(visitToEdit.patientName);
+		smallFields[1].setText(visitToEdit.weight);
+		smallFields[2].setText(visitToEdit.height);
+		smallFields[3].setText(visitToEdit.bodyTemperature);
+		smallFields[4].setText(visitToEdit.bloodPressure);
+		cbUnderAge.setSelected(visitToEdit.under12);
+		
+		bigFields[0].setText(visitToEdit.reasonFor);
+		bigFields[1].setText(visitToEdit.phyExam);
+		bigFields[2].setText(visitToEdit.notes);
+		
+		tfDate.setText(visitToEdit.date.toLocalDate().toString());
+	}
+	
+	private void saveVisit() {
+		Visit visitToSave = PatientSystem.currentVisit;
+		
+		visitToSave.patientName = smallFields[0].getText();
+		visitToSave.weight = smallFields[1].getText();
+		visitToSave.height = smallFields[2].getText();
+		visitToSave.bodyTemperature	= smallFields[3].getText();
+		visitToSave.bloodPressure = smallFields[4].getText();
+		visitToSave.under12 = cbUnderAge.isSelected();
+		
+		visitToSave.reasonFor = bigFields[0].getText();
+		visitToSave.phyExam = bigFields[1].getText();
+		visitToSave.notes = bigFields[2].getText();
+		
+		visitToSave.save(visitToSave.number);
+	}
+	
 	private void goBack() {
+		saveVisit();
+		
 		if(LoginSystem.currentLogin.isStaff) {
-			ViewController.switchView(Views.PATIENT_VISITS);
-		} else {
 			ViewController.switchView(Views.PATIENT_VISITS_STAFF);
+		} else {
+			ViewController.switchView(Views.PATIENT_VISITS);
 		}
 	}
 }
