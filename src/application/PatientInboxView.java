@@ -287,20 +287,8 @@ public class PatientInboxView extends View{
 		returnAndReply.getChildren().addAll(backToPortal, send, reply);
 		returnAndReply.setPadding(new Insets(50));
 		
-		scrollingButtons = new HBox(10);
-		forward = new Button(" > ");
-		backwards = new Button(" < ");
-		forward.setPrefSize(150, 50);
-		backwards.setPrefSize(150, 50);
-		scrollingButtons.getChildren().addAll(backwards, forward);
-		scrollingButtons.setPadding(new Insets(10));
-		BorderPane.setMargin(scrollingButtons, new Insets(50));
-		
 		sideButtonAlign = new VBox();
 		newMessage = CommonControls.createButton("Compose New Message", e -> System.out.println());
-		//newMessage = new Button("Compose New Message");
-		//newMessage.setPrefSize(125, 50);
-		//newMessage.setMinSize(200, 50);
 		sideButtonAlign.getChildren().addAll(newMessage);
 		sideButtonAlign.setPadding(new Insets(10));
 

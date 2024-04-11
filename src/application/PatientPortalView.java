@@ -122,9 +122,9 @@ public class PatientPortalView extends View {
 		//ObservableList<String> mail = FXCollections.observableArrayList(
 				//"Msg 1", "Msg 2", "Msg 3", "Msg 4", "Msg 5", "Msg 6", "Msg 7");
 
-																	
-		btnNewMsg = new Button("New Message");
-		btnNewMsg.setOnAction(e -> ViewController.switchView(Views.PATIENT_INBOX));
+										
+		btnNewMsg = CommonControls.createButton("Open Inbox", Views.PATIENT_INBOX);
+		CommonControls.changeControlSize(btnNewMsg, 100, 40);
 		mailLayout.getChildren().addAll(lblMail, lstMail, btnNewMsg);
 		
 		VBox contactLayout = new VBox(5);
