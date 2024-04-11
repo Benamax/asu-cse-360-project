@@ -65,35 +65,39 @@ public class PatientInboxView extends View{
 	String user = LoginSystem.getCurrentUsername();
 
 	ObservableList<Message> mail = FXCollections.observableArrayList();
-	ObservableList<Message> checking = FXCollections.observableArrayList();
+	List<Message> checking = FXCollections.observableArrayList();
 	ObservableList<String> parseMail = FXCollections.observableArrayList();
 	String message;
 	int switchTo = 0;
 	
 	private void startBackgroundUpdate() {
 	    Timeline timeline = new Timeline(
-	        new KeyFrame(Duration.seconds(1), event -> {
+	        new KeyFrame(Duration.seconds(.1), event -> {
 	        	user = LoginSystem.getCurrentUsername();
 	    		if (user != "") {
 	    			if(!MessageSystem.loadMessages(user).isEmpty()) {
 	    				List<Message> msgContents = MessageSystem.loadMessages(user);
+	    				
 	    				List<String> msgNames = MessageSystem.loadMessageNames(user);
-	    				checking = FXCollections.observableArrayList(msgContents);
-	    				parseMail = FXCollections.observableArrayList();
 
-	    				for (int i = 0; i < msgContents.size(); i++) {
-	    					String parse = "";
-	    					
-	    					parse += ("Sender: \t" + msgContents.get(i).sender + "\n");
-	    					parse += ("Receiver: \t" + msgContents.get(i).recepient + "\n");
-	    					parse += ("Title: \t" + msgContents.get(i).title + "\n");
-	    					parse += ("Message: \n" + msgContents.get(i).content + "\n");
-	    					
-	    					parseMail.add(parse);
+	    				if (msgContents.size() != checking.size()) {
+		    				parseMail = FXCollections.observableArrayList();
+		    				for (int i = 0; i < msgContents.size(); i++) {
+		    					String parse = "";
+		    					
+		    					parse += ("Sender: \t" + msgContents.get(i).sender + "\n");
+		    					parse += ("Receiver: \t" + msgContents.get(i).recepient + "\n");
+		    					parse += ("Title: \t" + msgContents.get(i).title + "\n");
+		    					parse += ("Message: \n" + msgContents.get(i).content + "\n");
+		    					
+		    					parseMail.add(parse);
+		    				}
+			    				listView.setItems(parseMail);
+			    				checking = msgContents;
+			    				main.setCenter(mailScroller);
 	    				}
 
-	    				listView.setItems(parseMail);
-	    			}
+	    			}	
 	        		/*if (new MessageSystem().loadMessages(user) != null) {
 	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
 	        			checking = FXCollections.observableArrayList(checker);
@@ -110,11 +114,10 @@ public class PatientInboxView extends View{
 	}
 
 	public Parent generate() {
-		messageTitle = new TextArea(" ");
 		main = new BorderPane();
 		startBackgroundUpdate();
 		initializeUIComponents();
-	
+
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			message = new String(outputMessage(listView.getSelectionModel().getSelectedIndex()));
 		           
@@ -130,7 +133,7 @@ public class PatientInboxView extends View{
 	        	  main.setCenter(mailScroller);
 	          }
 	    });
-	
+
 		messageContents.setOnMouseClicked(event ->  {
 			//mailScroller.setVisible(true);
 			//messageContents.setVisible(false);
@@ -220,7 +223,7 @@ public class PatientInboxView extends View{
     	back.setOnAction(event ->{
     		//backButtonHandler("REMAIN");
         	send.setVisible(false);
-        	title.setText("Staff Inbox");
+        	title.setText("Patient Inbox");
         	main.setCenter(messageContents);
         	returnAndReply.getChildren().removeAll(back, send, reply);
         	returnAndReply.getChildren().addAll(backToPortal, send, reply);
@@ -253,7 +256,7 @@ public class PatientInboxView extends View{
 	}
 	
 	private void initializeUIComponents() {
-		
+		messageTitle = new TextArea(" ");
 		title = new Text("Patient Inbox");
 		title.setFont(Font.font("Arial", FontWeight.BOLD , 26));
 		
@@ -261,6 +264,7 @@ public class PatientInboxView extends View{
 		titleBox.getChildren().add(title);
 		titleBox.setAlignment(Pos.CENTER);
 		main.setTop(titleBox);
+
 		BorderPane.setMargin(titleBox, new Insets(50));
 		
 		returnAndReply = new HBox(300);
@@ -271,7 +275,7 @@ public class PatientInboxView extends View{
 		});
 		back = CommonControls.createButton("Back", e -> {
 			send.setVisible(false);
-			title.setText("Staff Inbox");
+			title.setText("Patient Inbox");
     		main.setCenter(messageContents);
     		returnAndReply.getChildren().removeAll(back, send, reply);
     		returnAndReply.getChildren().addAll(backToPortal, send, reply);

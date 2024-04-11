@@ -63,54 +63,58 @@ public class InboxView extends View{
 	
 	LoginSystem check = new LoginSystem();
 	String user = LoginSystem.getCurrentUsername();
-
+	
 	ObservableList<Message> mail = FXCollections.observableArrayList();
-	ObservableList<Message> checking = FXCollections.observableArrayList();
+	List<Message> checking = FXCollections.observableArrayList();
 	ObservableList<String> parseMail = FXCollections.observableArrayList();
 	String message;
 	int switchTo = 0;
 	
 	private void startBackgroundUpdate() {
 	    Timeline timeline = new Timeline(
-	        new KeyFrame(Duration.seconds(1), event -> {
-	        	user = LoginSystem.getCurrentUsername();
-	    		if (user != "") {
-	    			if(!MessageSystem.loadMessages(user).isEmpty()) {
-	    				List<Message> msgContents = MessageSystem.loadMessages(user);
-	    				List<String> msgNames = MessageSystem.loadMessageNames(user);
-	    				checking = FXCollections.observableArrayList(msgContents);
-	    				parseMail = FXCollections.observableArrayList();
+		        new KeyFrame(Duration.seconds(.1), event -> {
+		        	user = LoginSystem.getCurrentUsername();
+		    		if (user != "") {
+		    			if(!MessageSystem.loadMessages(user).isEmpty()) {
+		    				List<Message> msgContents = MessageSystem.loadMessages(user);
+		    				
+		    				List<String> msgNames = MessageSystem.loadMessageNames(user);
 
-	    				for (int i = 0; i < msgContents.size(); i++) {
-	    					String parse = "";
-	    					
-	    					parse += ("Sender: \t" + msgContents.get(i).sender + "\n");
-	    					parse += ("Receiver: \t" + msgContents.get(i).recepient + "\n");
-	    					parse += ("Title: \t" + msgContents.get(i).title + "\n");
-	    					parse += ("Message: \n" + msgContents.get(i).content + "\n");
-	    					
-	    					parseMail.add(parse);
-	    				}
+		    				if (msgContents.size() != checking.size()) {
+			    				parseMail = FXCollections.observableArrayList();
+			    				for (int i = 0; i < msgContents.size(); i++) {
+			    					String parse = "";
+			    					
+			    					parse += ("Sender: \t" + msgContents.get(i).sender + "\n");
+			    					parse += ("Receiver: \t" + msgContents.get(i).recepient + "\n");
+			    					parse += ("Title: \t" + msgContents.get(i).title + "\n");
+			    					parse += ("Message: \n" + msgContents.get(i).content + "\n");
+			    					
+			    					parseMail.add(parse);
+			    				}
+				    				listView.setItems(parseMail);
+				    				checking = msgContents;
+				    				main.setCenter(mailScroller);
+		    				}
 
-	    				listView.setItems(parseMail);
-	    			}
-	        		/*if (new MessageSystem().loadMessages(user) != null) {
-	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
-	        			checking = FXCollections.observableArrayList(checker);
-	        			if(checking.equals(mail) == false) {
-	        				mail = checking;
-	        			}
-	        			listView.setItems(mail);
-	        		}*/
-	    		}
-	        })
-	    );
-	    timeline.setCycleCount(Timeline.INDEFINITE);
-	    timeline.play();
+		    			}	
+		        		/*if (new MessageSystem().loadMessages(user) != null) {
+		        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
+		        			checking = FXCollections.observableArrayList(checker);
+		        			if(checking.equals(mail) == false) {
+		        				mail = checking;
+		        			}
+		        			listView.setItems(mail);
+		        		}*/
+		    		}
+		        })
+		    );
+		    timeline.setCycleCount(Timeline.INDEFINITE);
+		    timeline.play();
 	}
 
 	public Parent generate() {
-		messageTitle = new TextArea(" ");
+
 		main = new BorderPane();
 		startBackgroundUpdate();
 		initializeUIComponents();
@@ -214,7 +218,7 @@ public class InboxView extends View{
       	
     	send.setOnAction(event -> {
     		sendButtonMethod();
-        	title.setText("Patient Inbox");
+        	title.setText("Staff Inbox");
         	main.setCenter(messageContents); });
     	
     	back.setOnAction(event ->{
@@ -253,8 +257,8 @@ public class InboxView extends View{
 	}
 	
 	private void initializeUIComponents() {
-		
-		title = new Text("Patient Inbox");
+		messageTitle = new TextArea(" ");
+		title = new Text("Staff Inbox");
 		title.setFont(Font.font("Arial", FontWeight.BOLD , 26));
 		
 		titleBox = new VBox();
