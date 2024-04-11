@@ -26,12 +26,19 @@ public class LoginSystem {
 		if(!newLogin.password.equals(password))
 			return false;
 		
+		if(!newLogin.isStaff) {
+			Patient newPatient = new Patient();
+			newPatient.load(newLogin.patientID);
+			PatientSystem.currentPatient = newPatient;
+		}
+			
 		currentLogin = newLogin;
 		return true;
 	}
 	
 	public static void signOut() {
 		currentLogin = null;
+		PatientSystem.currentPatient = null;
 	}
 	
 	public static String getCurrentUsername() {

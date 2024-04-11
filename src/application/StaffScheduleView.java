@@ -1,6 +1,5 @@
 package application;
 
-import application.PatientVisitsView.DatePane;
 import application.ViewController.Views;
 import common_controls.CommonControls;
 import javafx.geometry.Insets;
@@ -65,6 +64,11 @@ public class StaffScheduleView extends View {
 		
 		root = stackPane;
 		return root;
+	}
+	
+	@Override
+	public void onEnter() {
+		
 	}
 
 	@Override

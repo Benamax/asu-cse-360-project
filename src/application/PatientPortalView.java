@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import application.ViewController.Views;
 import common_controls.CommonControls;
@@ -15,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -50,15 +52,13 @@ public class PatientPortalView extends View {
 	TextField tfEmail;
 	Button btnEmail;
 	
-	// Right column (scheduled appointments, previous visits)
-	Label lblAppointments;
-	TextField tfAppointments;
+	// Right column (previous visits)
 	Label lblLastVisit;
-	TextField tfLastVisit;
+	TextArea tfLastVisit;
 	Button btnVisits;
 	
 	Button btnSignOut;
-	MessageSystem logs = new MessageSystem();
+	/*MessageSystem logs = new MessageSystem();
 	LoginSystem check = new LoginSystem();
 	String user = LoginSystem.getCurrentUsername();
 
@@ -79,12 +79,12 @@ public class PatientPortalView extends View {
 	    );
 	    timeline.setCycleCount(Timeline.INDEFINITE);
 	    timeline.play();
-	}
+	}*/
 	
 	
 	@Override
 	public Parent generate() {
-		startBackgroundUpdate();	
+		//startBackgroundUpdate();	
 		title = new Label("Patient Portal");
 		title.setFont(Font.font("Arial", 30));
 		
@@ -122,9 +122,9 @@ public class PatientPortalView extends View {
 		//ObservableList<String> mail = FXCollections.observableArrayList(
 				//"Msg 1", "Msg 2", "Msg 3", "Msg 4", "Msg 5", "Msg 6", "Msg 7");
 
-																	
-		btnNewMsg = new Button("New Message");
-		btnNewMsg.setOnAction(e -> ViewController.switchView(Views.PATIENT_INBOX));
+										
+		btnNewMsg = CommonControls.createButton("Open Inbox", Views.PATIENT_INBOX);
+		CommonControls.changeControlSize(btnNewMsg, 100, 40);
 		mailLayout.getChildren().addAll(lblMail, lstMail, btnNewMsg);
 		
 		VBox contactLayout = new VBox(5);
@@ -134,21 +134,24 @@ public class PatientPortalView extends View {
 		lblHomeAddr = new Label("Home Address");
 		tfHomeAddr = new TextField();
 		tfHomeAddr.setPrefWidth(250);
-		btnHomeAddr = new Button("Update");
+		//btnHomeAddr = new Button("Update");
+		btnHomeAddr = CommonControls.createUnsizedButton("Update", e -> updateHomeAddr());
 		homeAddr.getChildren().addAll(tfHomeAddr, btnHomeAddr);
 		
 		HBox phone = new HBox(0);
 		lblPhone = new Label("Phone");
 		tfPhone = new TextField();
 		tfPhone.setPrefWidth(250);
-		btnPhone = new Button("Update");
+		//btnPhone = new Button("Update");
+		btnPhone = CommonControls.createUnsizedButton("Update", e -> updatePhone());
 		phone.getChildren().addAll(tfPhone, btnPhone);
 		
 		HBox email = new HBox(0);
 		lblEmail = new Label("Email");
 		tfEmail = new TextField();
 		tfEmail.setPrefWidth(250);
-		btnEmail = new Button("Update");
+		//btnEmail = new Button("Update");
+		btnEmail = CommonControls.createUnsizedButton("Update", e -> updateEmail());
 		email.getChildren().addAll(tfEmail, btnEmail);
 		
 		contactLayout.getChildren().addAll(lblContact, lblHomeAddr, homeAddr, lblPhone, phone, lblEmail, email);
@@ -156,16 +159,13 @@ public class PatientPortalView extends View {
 		
 		
 		VBox column3 = new VBox(5);
-		lblAppointments = new Label("Current Appointments");
-		tfAppointments = new TextField();
-		tfAppointments.setEditable(false);
-		tfAppointments.setPrefSize(200, 150);
 		lblLastVisit = new Label("Last Visit");
-		tfLastVisit = new TextField();
+		tfLastVisit = new TextArea();
 		tfLastVisit.setEditable(false);
-		tfLastVisit.setPrefSize(200, 150);
+		tfLastVisit.setWrapText(true);
+		tfLastVisit.setPrefSize(200, 350);
 		
-		column3.getChildren().addAll(lblAppointments, tfAppointments, lblLastVisit, tfLastVisit, btnVisits);
+		column3.getChildren().addAll(lblLastVisit, tfLastVisit, btnVisits);
 		//column3.setAlignment(Pos.CENTER);
 		
 		
@@ -190,10 +190,60 @@ public class PatientPortalView extends View {
 		root = columns;
 		return root;
 	}
+	
+	@Override
+	public void onEnter() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		tfHomeAddr.setText(patient.homeAddress);
+		tfPhone.setText(patient.phoneNumber);
+		tfEmail.setText(patient.email);
+		
+		// Get messages
+		List<String> msgNames = MessageSystem.loadMessageNames(LoginSystem.currentLogin.username);
+		ObservableList<String> msgObsList = FXCollections.observableArrayList(msgNames);
+		lstMail.setItems(msgObsList);
+		
+		// Get last visit
+		List<Visit> visits = VisitSystem.loadVisits(patientID);
+		if(visits.size() > 0) {
+			Visit lastVisit = visits.get(0);
+			tfLastVisit.setText(String.format("Reason for Appointment:\n%s\n\nDoctor's Notes:\n%s", lastVisit.reasonFor, lastVisit.notes));
+		}
+	}
 
 	@Override
 	public void reset() {
 		
+	}
+	
+	private void updateHomeAddr() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		patient.homeAddress = tfHomeAddr.getText();
+		patient.save(patientID);
+	}
+	
+	private void updatePhone() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		patient.phoneNumber = tfPhone.getText();
+		patient.save(patientID);
+	}
+	
+	private void updateEmail() {
+		Patient patient = new Patient();
+		String patientID = LoginSystem.currentLogin.patientID;
+		patient.load(patientID);
+		
+		patient.email = tfEmail.getText();
+		patient.save(patientID);
 	}
 
 }
