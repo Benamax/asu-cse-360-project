@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.ViewController.Views;
+import common_controls.CommonControls;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -29,8 +30,8 @@ import javafx.util.Duration;
 public class InboxView extends View{
 	
 	BorderPane main;
-	StackPane centerPane;
 	ScrollPane mailScroller;
+	StackPane centerPane;
 	
 	VBox titleBox;
 	VBox sideButtonAlign;
@@ -57,28 +58,41 @@ public class InboxView extends View{
 	
 	TextArea messageContents;
 	TextArea composeMessage;
+	TextArea messageTitle;
 	TextField senderEmail;
 	
+	LoginSystem check = new LoginSystem();
 	String user = LoginSystem.getCurrentUsername();
-	
-	ObservableList<String> mail = FXCollections.observableArrayList();
-	ObservableList<String> checking = FXCollections.observableArrayList();
-	
+
+	ObservableList<Message> mail = FXCollections.observableArrayList();
+	ObservableList<Message> checking = FXCollections.observableArrayList();
+	ObservableList<String> parseMail = FXCollections.observableArrayList();
 	String message;
 	int switchTo = 0;
-
+	
 	private void startBackgroundUpdate() {
 	    Timeline timeline = new Timeline(
 	        new KeyFrame(Duration.seconds(1), event -> {
-	    		user = LoginSystem.getCurrentUsername();
+	        	user = LoginSystem.getCurrentUsername();
 	    		if (user != "") {
 	    			if(!MessageSystem.loadMessages(user).isEmpty()) {
+	    				List<Message> msgContents = MessageSystem.loadMessages(user);
 	    				List<String> msgNames = MessageSystem.loadMessageNames(user);
-	    				checking = FXCollections.observableArrayList(msgNames);
-	    				if(checking.equals(mail) == false) {
-	    					mail = checking;
+	    				checking = FXCollections.observableArrayList(msgContents);
+	    				parseMail = FXCollections.observableArrayList();
+
+	    				for (int i = 0; i < msgContents.size(); i++) {
+	    					String parse = "";
+	    					
+	    					parse += ("Sender: \t" + msgContents.get(i).sender + "\n");
+	    					parse += ("Receiver: \t" + msgContents.get(i).recepient + "\n");
+	    					parse += ("Title: \t" + msgContents.get(i).title + "\n");
+	    					parse += ("Message: \n" + msgContents.get(i).content + "\n");
+	    					
+	    					parseMail.add(parse);
 	    				}
-	    				listView.setItems(mail);
+
+	    				listView.setItems(parseMail);
 	    			}
 	        		/*if (new MessageSystem().loadMessages(user) != null) {
 	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
@@ -94,126 +108,83 @@ public class InboxView extends View{
 	    timeline.setCycleCount(Timeline.INDEFINITE);
 	    timeline.play();
 	}
-	
+
 	public Parent generate() {
+		messageTitle = new TextArea(" ");
 		main = new BorderPane();
 		startBackgroundUpdate();
 		initializeUIComponents();
-		
+	
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(listView.getSelectionModel() != null) {
-	            message = outputMessage(listView.getSelectionModel().getSelectedIndex());
+			message = new String(outputMessage(listView.getSelectionModel().getSelectedIndex()));
+		           
+	        if(newValue != null) {
+	        	newValue = null;
+	            messageContents.setText(message);
+	            main.setCenter(messageContents);
+	            reply.setOnAction(e -> replyFunction());
+	            //mailScroller.setVisible(true);
 	            
-	            if(newValue != null) {
-	                newValue = null;
-	                messageContents.setText(message);
-	                main.setCenter(messageContents);
-	            	reply.setOnAction(e -> replyFunction());      	
-	            } else {
-	            	main.setCenter(mailScroller); 
-	            } } } );
-		
-		messageContents.setOnMouseClicked(event -> main.setCenter(mailScroller));
-		
+	          } else {
+	        	//backToPortal.messageContents.setVisible(false);
+	        	  main.setCenter(mailScroller);
+	          }
+	    });
+	
+		messageContents.setOnMouseClicked(event ->  {
+			//mailScroller.setVisible(true);
+			//messageContents.setVisible(false);
+			main.setCenter(mailScroller);
+	    });
+			
 		newMessage.setOnAction(e -> {
 	    	returnAndReply.getChildren().removeAll(backToPortal, send, reply);
 	    	returnAndReply.getChildren().addAll(back, send, reply);
 	    	
-			send.setVisible(true);
+			//mailScroller.setVisible(false);
 			title.setText("Send New Message");
+			send.setVisible(true);
 			composeMessage.setText("");
+			messageTitle.setText("");
 			main.setCenter(sendLayout);
-        	
-			back.setOnAction(event ->{;
-		        	send.setVisible(false);
-		        	title.setText("Staff Inbox");
-		        	main.setCenter(messageContents);
-		        	returnAndReply.getChildren().removeAll(back, send, reply);
-		        	returnAndReply.getChildren().addAll(backToPortal, send, reply);
+	        
+			back.setOnAction(event ->{
+				send.setVisible(false);
+				title.setText("Staff Inbox");
+	    		main.setCenter(messageContents);
+	    		returnAndReply.getChildren().removeAll(back, send, reply);
+	    		returnAndReply.getChildren().addAll(backToPortal, send, reply);
 			});
 			
-			send.setOnAction(event -> { 
+			send.setOnAction(event -> {
 				sendButtonMethod();
 				main.setCenter(mailScroller);
 			});
 			mailScroller.setVisible(true);
-		});
-        
+	    });
+		
 		backToPortal.setOnAction(event ->{
 			listView.getSelectionModel().clearSelection();
 			mailScroller.setContent(listView);
 			ViewController.switchView(Views.STAFF_PORTAL);
 		});
 		
-		
-     	centerPane = new StackPane();
-     	centerPane.getChildren().addAll(mailScroller, messageContents);
-     	BorderPane.setMargin(centerPane, new Insets(30));
-        
-	 	main.setRight(sideButtonAlign);
-	 	main.setCenter(centerPane);
-	 	main.setBottom(returnAndReply);
-
-     	root = main;
-     	root.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #a1ffd3 30%, #ffe5c4 47%);");
-	 	return root;
-		
-	}
+		centerPane = new StackPane();
+		centerPane.getChildren().addAll(mailScroller, messageContents);
+		BorderPane.setMargin(centerPane, new Insets(30));
+	        
+		main.setRight(sideButtonAlign);
+		main.setCenter(centerPane);
+		main.setBottom(returnAndReply);
 	
-	private void replyFunction() {
-		title.setText("Replying");
-    	send.setVisible(true);
-    	
-    	senderEmail.setText(getSender(message));
-    	
-    	returnAndReply.getChildren().removeAll(backToPortal, send, reply);
-    	returnAndReply.getChildren().addAll(back, send, reply);
-    	
-		composeMessage.setText("");
-      	main.setCenter(sendLayout);
-      	
-    	send.setOnAction(event -> {
-    		
-    		sendButtonMethod();
-        	title.setText("Staff Inbox");
-        	main.setCenter(messageContents); });
-    	
-    	back.setOnAction(event ->{
-    		//backButtonHandler("REMAIN");
-        	send.setVisible(false);
-        	title.setText("Staff Inbox");
-        	main.setCenter(messageContents);
-        	returnAndReply.getChildren().removeAll(back, send, reply);
-        	returnAndReply.getChildren().addAll(backToPortal, send, reply);
-    		});
-	}
-	
-	private String getMail(String messageString) {
+		root = main;
+		root.setStyle("-fx-background-color: linear-gradient(from 41px 34px to 50px 50px, reflect,  #a1ffd3 30%, #ffe5c4 47%);");
+		return root;
 		
-		int colonIndex = messageString.indexOf(':');
-		String message = new String();
-		
-		if(colonIndex != -1) {
-			message = messageString.substring(colonIndex + 1);
-			message = message.trim();
-		}
-		
-		return message;
-	}
-	
-	private String getSender(String messageString) {
-		
-		int colonIndex = messageString.indexOf(':');
-		String sender = new String();
-		
-		if(colonIndex != -1) {
-			sender = messageString.substring(0, colonIndex);
-		}
-		return sender;
 	}
 	
 	private void sendButtonMethod() {
-		MessageSystem.sendMessage("Example Title", composeMessage.getText(), senderEmail.getText());
+		MessageSystem.sendMessage(messageTitle.getText(), composeMessage.getText(), senderEmail.getText());
 		
 		/*if (new MessageSystem().loadMessages(user) != null && new MessageSystem().loadMessages(senderEmail.getText()) != null) {
 			// SENDER
@@ -229,6 +200,44 @@ public class InboxView extends View{
     	send.setVisible(false);
 	}
 	
+	private void replyFunction() {
+		title.setText("Replying");
+    	send.setVisible(true);
+    	
+    	returnAndReply.getChildren().removeAll(backToPortal, send, reply);
+    	returnAndReply.getChildren().addAll(back, send, reply);
+    	
+    	senderEmail.setText(getSender(message));
+		composeMessage.setText("");
+		messageTitle.setText("");
+      	main.setCenter(sendLayout);
+      	
+    	send.setOnAction(event -> {
+    		sendButtonMethod();
+        	title.setText("Patient Inbox");
+        	main.setCenter(messageContents); });
+    	
+    	back.setOnAction(event ->{
+    		//backButtonHandler("REMAIN");
+        	send.setVisible(false);
+        	title.setText("Staff Inbox");
+        	main.setCenter(messageContents);
+        	returnAndReply.getChildren().removeAll(back, send, reply);
+        	returnAndReply.getChildren().addAll(backToPortal, send, reply);
+    		});
+	}
+	
+	private String getSender(String messageString) {
+		
+		int colonIndex = messageString.indexOf(':');
+		String sender = new String();
+		
+		if(colonIndex != -1) {
+			sender = messageString.substring(0, colonIndex);
+		}
+		return sender;
+	}
+	
 	private String outputMessage(int index) {
 		
 		if(index < 0) {
@@ -236,13 +245,16 @@ public class InboxView extends View{
 		}
 		
 		String messageToSend = new String();
-		messageToSend = mail.get(index);
+		
+		messageToSend = parseMail.get(index);
+		
 		return messageToSend;
 		
 	}
 	
 	private void initializeUIComponents() {
-		title = new Text("Staff Inbox");
+		
+		title = new Text("Patient Inbox");
 		title.setFont(Font.font("Arial", FontWeight.BOLD , 26));
 		
 		titleBox = new VBox();
@@ -252,15 +264,22 @@ public class InboxView extends View{
 		BorderPane.setMargin(titleBox, new Insets(50));
 		
 		returnAndReply = new HBox(300);
-		backToPortal = new Button("Back");
-		backToPortal.setPrefSize(150, 50);
-		back = new Button("Back");
-		back.setPrefSize(150, 50);
-		reply = new Button("reply");
-		reply.setPrefSize(150, 50);
-		send = new Button("Send");
-		send.setPrefSize(150, 50);
+		backToPortal = CommonControls.createButton("Back", e ->{
+			listView.getSelectionModel().clearSelection();
+			mailScroller.setContent(listView);
+			ViewController.switchView(Views.PATIENT_PORTAL);
+		});
+		back = CommonControls.createButton("Back", e -> {
+			send.setVisible(false);
+			title.setText("Staff Inbox");
+    		main.setCenter(messageContents);
+    		returnAndReply.getChildren().removeAll(back, send, reply);
+    		returnAndReply.getChildren().addAll(backToPortal, send, reply);
+		});
+		reply = CommonControls.createButton("Reply", e -> replyFunction());
+		send = CommonControls.createButton("Send", e -> sendButtonMethod());
 		send.setVisible(false);
+		
 		returnAndReply.getChildren().addAll(backToPortal, send, reply);
 		returnAndReply.setPadding(new Insets(50));
 		
@@ -274,9 +293,10 @@ public class InboxView extends View{
 		BorderPane.setMargin(scrollingButtons, new Insets(50));
 		
 		sideButtonAlign = new VBox();
-		newMessage = new Button("Compose New Message");
-		newMessage.setPrefSize(125, 50);
-		newMessage.setMinSize(200, 50);
+		newMessage = CommonControls.createButton("Compose New Message", e -> System.out.println());
+		//newMessage = new Button("Compose New Message");
+		//newMessage.setPrefSize(125, 50);
+		//newMessage.setMinSize(200, 50);
 		sideButtonAlign.getChildren().addAll(newMessage);
 		sideButtonAlign.setPadding(new Insets(10));
 
@@ -291,7 +311,13 @@ public class InboxView extends View{
 		composeMessage.setPrefHeight(400);
 		composeMessage.setPrefWidth(200);
 		BorderPane.setMargin(composeMessage, new Insets(30));
-
+		
+		messageTitle = new TextArea();
+		messageTitle.setEditable(true);
+		messageTitle.setPrefHeight(100);
+		messageTitle.setPrefWidth(200);
+		BorderPane.setMargin(messageTitle, new Insets(30));
+		
 		mailScroller = new ScrollPane();             
         mailScroller.setFitToWidth(true);
 		mailScroller.setFitToHeight(true);
@@ -301,17 +327,17 @@ public class InboxView extends View{
 		BorderPane.setMargin(sendLayout, new Insets(30));
 		viewingLayout = new VBox();
 		BorderPane.setMargin(viewingLayout, new Insets(30));
-		
+
 		sendTo = new Text();
 		senderEmail = new TextField("");
 		email = new Text("Email: ");
 		contents = new Text("Write Your Message: ");
-		
-		listView = new ListView<>(mail);
-        listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.SINGLE);
-    	
-        sendLayout.getChildren().addAll(email, senderEmail, contents, composeMessage);
-        mailScroller.setContent(listView);
+
+		listView = new ListView<>(parseMail);
+	    listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.SINGLE);
+	    
+		sendLayout.getChildren().addAll(email, senderEmail, contents, messageTitle, composeMessage);
+		mailScroller.setContent(listView);  
 		
 	}
 	

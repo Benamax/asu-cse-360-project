@@ -1,7 +1,12 @@
 package application;
 
+import java.util.List;
+
 import application.ViewController.Views;
 import common_controls.CommonControls;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -15,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class PatientInformationView extends View {
 
@@ -22,14 +28,37 @@ public class PatientInformationView extends View {
 		Button finishButton;
 		
 		Label titleLabel;
-		
+		Text phoneNumber;
 		InfoPane[] infoPanes;
 		String[] infoTitles;
-			
+		StackPane stackPane;
+		Patient patient = PatientSystem.currentPatient;
+		private void startBackgroundUpdate() {
+		    Timeline timeline = new Timeline(
+		        new KeyFrame(Duration.seconds(1), event -> {
+					if (PatientSystem.currentPatient != null) {
+						Patient patient = PatientSystem.currentPatient;
+						if (patient.phoneNumber != null) {
+							phoneNumber.setText("Patient Phone #: " + PatientSystem.currentPatient.phoneNumber);
+							stackPane.getChildren().remove(phoneNumber);
+							stackPane.getChildren().add(phoneNumber);
+						}
+					}
+		        })
+		    );
+		    timeline.setCycleCount(Timeline.INDEFINITE);
+		    timeline.play();
+		}
+		
+		
+		
 		@Override
 		public Parent generate() {
+			stackPane = new StackPane();
+			phoneNumber = new Text("Patient Phone #: ");
+			startBackgroundUpdate();
 			
-			StackPane stackPane = new StackPane();
+
 			stackPane.setMinSize(1100, 700);
 			stackPane.setPrefSize(1100, 700);
 			stackPane.setMaxSize(1100, 700);
@@ -37,6 +66,8 @@ public class PatientInformationView extends View {
 			
 			titleLabel = new Label("Patient Information");
 			titleLabel.setFont(Font.font("Arial", 36));
+			
+			phoneNumber.setFont(Font.font("Arial", 16));
 			
 			infoTitles = new String[] {
 					"Known Allergies",
@@ -61,10 +92,11 @@ public class PatientInformationView extends View {
 			priorVisitsButton = CommonControls.createButton("Visits", Views.PATIENT_VISITS_STAFF);
 			finishButton = CommonControls.createButton("Finish", Views.PATIENT_LOOKUP);
 			
-			stackPane.getChildren().addAll(titleLabel, infoGrid, priorVisitsButton, finishButton);
+			stackPane.getChildren().addAll(titleLabel, infoGrid, phoneNumber, priorVisitsButton, finishButton);
 			StackPane.setAlignment(titleLabel, Pos.TOP_CENTER);
 			StackPane.setAlignment(priorVisitsButton, Pos.CENTER_RIGHT);
 			StackPane.setAlignment(finishButton, Pos.TOP_LEFT);
+			StackPane.setAlignment(phoneNumber, Pos.BOTTOM_RIGHT);
 			
 			root = stackPane;
 			return root;
@@ -152,6 +184,7 @@ public class PatientInformationView extends View {
 			
 			patient.save(patient.getPatientID());
 		}
+		
 		
 		public InfoPane findPane(String title) {
 			int i = 0;

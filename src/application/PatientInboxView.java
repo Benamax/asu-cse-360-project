@@ -58,14 +58,15 @@ public class PatientInboxView extends View{
 	
 	TextArea messageContents;
 	TextArea composeMessage;
+	TextArea messageTitle;
 	TextField senderEmail;
 	
 	LoginSystem check = new LoginSystem();
 	String user = LoginSystem.getCurrentUsername();
 
-	ObservableList<String> mail = FXCollections.observableArrayList();
-	ObservableList<String> checking = FXCollections.observableArrayList();
-	
+	ObservableList<Message> mail = FXCollections.observableArrayList();
+	ObservableList<Message> checking = FXCollections.observableArrayList();
+	ObservableList<String> parseMail = FXCollections.observableArrayList();
 	String message;
 	int switchTo = 0;
 	
@@ -75,12 +76,23 @@ public class PatientInboxView extends View{
 	        	user = LoginSystem.getCurrentUsername();
 	    		if (user != "") {
 	    			if(!MessageSystem.loadMessages(user).isEmpty()) {
+	    				List<Message> msgContents = MessageSystem.loadMessages(user);
 	    				List<String> msgNames = MessageSystem.loadMessageNames(user);
-	    				checking = FXCollections.observableArrayList(msgNames);
-	    				if(checking.equals(mail) == false) {
-	    					mail = checking;
+	    				checking = FXCollections.observableArrayList(msgContents);
+	    				parseMail = FXCollections.observableArrayList();
+
+	    				for (int i = 0; i < msgContents.size(); i++) {
+	    					String parse = "";
+	    					
+	    					parse += ("Sender: \t" + msgContents.get(i).sender + "\n");
+	    					parse += ("Receiver: \t" + msgContents.get(i).recepient + "\n");
+	    					parse += ("Title: \t" + msgContents.get(i).title + "\n");
+	    					parse += ("Message: \n" + msgContents.get(i).content + "\n");
+	    					
+	    					parseMail.add(parse);
 	    				}
-	    				listView.setItems(mail);
+
+	    				listView.setItems(parseMail);
 	    			}
 	        		/*if (new MessageSystem().loadMessages(user) != null) {
 	        			ArrayList<String> checker = new MessageSystem().loadMessages(user);
@@ -98,6 +110,7 @@ public class PatientInboxView extends View{
 	}
 
 	public Parent generate() {
+		messageTitle = new TextArea(" ");
 		main = new BorderPane();
 		startBackgroundUpdate();
 		initializeUIComponents();
@@ -132,6 +145,7 @@ public class PatientInboxView extends View{
 			title.setText("Send New Message");
 			send.setVisible(true);
 			composeMessage.setText("");
+			messageTitle.setText("");
 			main.setCenter(sendLayout);
 	        
 			back.setOnAction(event ->{
@@ -170,7 +184,7 @@ public class PatientInboxView extends View{
 	}
 	
 	private void sendButtonMethod() {
-		MessageSystem.sendMessage("Example Title", composeMessage.getText(), senderEmail.getText());
+		MessageSystem.sendMessage(messageTitle.getText(), composeMessage.getText(), senderEmail.getText());
 		
 		/*if (new MessageSystem().loadMessages(user) != null && new MessageSystem().loadMessages(senderEmail.getText()) != null) {
 			// SENDER
@@ -195,6 +209,7 @@ public class PatientInboxView extends View{
     	
     	senderEmail.setText(getSender(message));
 		composeMessage.setText("");
+		messageTitle.setText("");
       	main.setCenter(sendLayout);
       	
     	send.setOnAction(event -> {
@@ -231,7 +246,7 @@ public class PatientInboxView extends View{
 		
 		String messageToSend = new String();
 		
-		messageToSend = mail.get(index);
+		messageToSend = parseMail.get(index);
 		
 		return messageToSend;
 		
@@ -296,7 +311,13 @@ public class PatientInboxView extends View{
 		composeMessage.setPrefHeight(400);
 		composeMessage.setPrefWidth(200);
 		BorderPane.setMargin(composeMessage, new Insets(30));
-
+		
+		messageTitle = new TextArea();
+		messageTitle.setEditable(true);
+		messageTitle.setPrefHeight(100);
+		messageTitle.setPrefWidth(200);
+		BorderPane.setMargin(messageTitle, new Insets(30));
+		
 		mailScroller = new ScrollPane();             
         mailScroller.setFitToWidth(true);
 		mailScroller.setFitToHeight(true);
@@ -312,10 +333,10 @@ public class PatientInboxView extends View{
 		email = new Text("Email: ");
 		contents = new Text("Write Your Message: ");
 
-		listView = new ListView<>(mail);
+		listView = new ListView<>(parseMail);
 	    listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.SINGLE);
 	    
-		sendLayout.getChildren().addAll(email, senderEmail, contents, composeMessage);
+		sendLayout.getChildren().addAll(email, senderEmail, contents, messageTitle, composeMessage);
 		mailScroller.setContent(listView);  
 		
 	}
